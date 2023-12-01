@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../public/images/favicon.ico">
+
+    <title>Law Firm - Dashboard</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" href="../../public/main/css/vendors_css.css">
+
+    <!-- Style-->
+    <link rel="stylesheet" href="../../public/main/css/style.css">
+    <link rel="stylesheet" href="../../public/main/css/skin_color.css">
+
+    <!-- Fontawesome 5,6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Themify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+
+    <style>
+        div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:last-child {
+            padding-left: 0;
+        }
+
+        .dataTables_filter {
+            float: none !important;
+        }
+    </style>
+
+</head>
+
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+    <div class="wrapper">
+        <div id="loader"></div>
+
+
+
+        <%- include('../partials/header') %>
+            <%- include('../partials/sidebar') %>
+
+
+
+                <!-- Content Wrapper. Contains page content -->
+                <div class="content-wrapper">
+                    <div class="container-full">
+                        <!-- Content Header (Page header) -->
+                        <div class="content-header">
+                            <div class="d-flex align-items-center">
+                                <div class="me-auto">
+                                    <h4 class="page-title">Cases</h4>
+                                    <div class="d-inline-block align-items-center">
+                                        <nav>
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item"><a href="/admin/dashboard"><i
+                                                            class="fa-solid fa-house"></i></a></li>
+                                                <li class="breadcrumb-item active" aria-current="page">Cases</li>
+                                            </ol>
+                                        </nav>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Main content -->
+                        <section class="content">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="box">
+                                        <div class="box-body">
+                                            <div class="table-responsive rounded card-table">
+                                                <table class="table border-no" id="example1">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Cases ID</th>
+                                                            <th>Date</th>
+                                                            <th>Client Name</th>
+                                                            <th>Attorney Assgined</th>
+                                                            <th>Case Type</th>
+                                                            <th>Status</th>
+                                                            <th>Hearing</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245879</td>
+                                                            <td>14 April 2021</td>
+                                                            <td>Aaliyah clark</td>
+                                                            <td>Mr. Johen Doe</td>
+                                                            <td>Business Litigation</td>
+                                                            <td><span class="badge badge-success-light">Win</span></td>
+                                                            <td>1 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" data-bs-toggle="modal"
+                                                                            data-bs-target="#modal-center"
+                                                                            onclick="editItem('Aaliyah clark', '1 Hearing')">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245880</td>
+                                                            <td>18 April 2021</td>
+                                                            <td>Mical clark</td>
+                                                            <td>Mr. Aiden Doe</td>
+                                                            <td>Criminal Law</td>
+                                                            <td><span class="badge badge-success-light">Win</span></td>
+                                                            <td>3 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245881</td>
+                                                            <td>22 May 2021, 15:30 PM</td>
+                                                            <td>Stela clark</td>
+                                                            <td>Mr. Lalvani doe</td>
+                                                            <td>Identity Theft</td>
+                                                            <td><span class="badge badge-danger-light">Lost</span></td>
+                                                            <td>FF-112</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245882</td>
+                                                            <td>26 April 2021</td>
+                                                            <td>Boone Doe</td>
+                                                            <td>Mr. Don Paton</td>
+                                                            <td>Travel Accident</td>
+                                                            <td><span class="badge badge-danger-light">Lost</span></td>
+                                                            <td>No Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245883</td>
+                                                            <td>30 April 2021</td>
+                                                            <td>Carlie Paton</td>
+                                                            <td>Mr. Mical Doe</td>
+                                                            <td>Legal Advice</td>
+                                                            <td><span class="badge badge-warning-light">Declined</span>
+                                                            </td>
+                                                            <td>5 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245884</td>
+                                                            <td>1 May 2021</td>
+                                                            <td>Delilah</td>
+                                                            <td>Mr. Johen Doe</td>
+                                                            <td>Business Law</td>
+                                                            <td><span class="badge badge-success-light">Win</span></td>
+                                                            <td>3 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245885</td>
+                                                            <td>2 May 2021</td>
+                                                            <td>Hannah Doe</td>
+                                                            <td>Mr. Jennifer Ruby</td>
+                                                            <td>Civil Litigation</td>
+                                                            <td><span class="badge badge-warning-light">Declined</span>
+                                                            </td>
+                                                            <td>7 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245886</td>
+                                                            <td>3 May 2021</td>
+                                                            <td>Emerson Clark</td>
+                                                            <td>Mr. Alex Siauw</td>
+                                                            <td>Insurance Defence</td>
+                                                            <td><span class="badge badge-warning-light">Declined</span>
+                                                            </td>
+                                                            <td>1 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245887</td>
+                                                            <td>4 May 2021</td>
+                                                            <td>Crystal Doe</td>
+                                                            <td>Mr. Samuel Jr.</td>
+                                                            <td>Family Law</td>
+                                                            <td><span class="badge badge-success-light">Win</span></td>
+                                                            <td>3 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245888</td>
+                                                            <td>5 May 2021</td>
+                                                            <td>Jenny don</td>
+                                                            <td>Mr. Widan Cheeh</td>
+                                                            <td>Cold & Flu</td>
+                                                            <td><span class="badge badge-warning-light">Declined</span>
+                                                            </td>
+                                                            <td>3 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245889</td>
+                                                            <td>6 May 2021</td>
+                                                            <td>Joanne Clark</td>
+                                                            <td>Mr. Samantha</td>
+                                                            <td>Employment Law</td>
+                                                            <td><span class="badge badge-danger-light">Lost</span></td>
+                                                            <td>No Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="hover-primary">
+                                                            <td>#p245890</td>
+                                                            <td>6 May 2021</td>
+                                                            <td>Madeline doe</td>
+                                                            <td>Mr. Widan Cheeh</td>
+                                                            <td>Business Litigation</td>
+                                                            <td><span class="badge badge-warning-light">Declined</span>
+                                                            </td>
+                                                            <td>4 Hearing</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <a class="hover-primary dropdown-toggle no-caret"
+                                                                        data-bs-toggle="dropdown"><i
+                                                                            class="fa fa-ellipsis-h"></i></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item" href="#">View
+                                                                            Details</a>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- /.content -->
+                    </div>
+                </div>
+                <!-- /.content-wrapper -->
+
+
+
+                <%- include('../partials/footer') %>
+
+
+
+                    <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
+                    <div class="control-sidebar-bg"></div>
+
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- Modal -->
+    <div class="modal center-modal fade" id="modal-center" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="editForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="editName" name="editName">
+                    </div>
+                    <div class="modal-footer modal-footer-uniform">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary float-end" onclick="saveChanges()">Save
+                            changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+
+
+    <!-- Sidebar -->
+
+    <!-- Page Content overlay -->
+
+
+
+    <!-- Edit Details -->
+    <script>
+        function editItem(name, hearing) {
+            console.log(hearing);
+            console.log(name);
+            // Populate the edit form with data from the clicked row
+            document.getElementById('editName').value = name;
+        }
+
+        function saveChanges() {
+            // Get values from the edit form and perform further actions (e.g., submit form via AJAX)
+            const editedName = document.getElementById('editName').value;
+
+            // Perform actions with the edited data (e.g., update the table, submit form via AJAX)
+            console.log(`Name: ${editedName}`);
+        }
+    </script>
+
+
+    <!-- Vendor JS -->
+    <script src="../../public/main/js/vendors.min.js"></script>
+    <script src="../../public/main/js/pages/chat-popup.js"></script>
+    <script src="../../public/assets/icons/feather-icons/feather.min.js"></script>
+
+    <script src="../../public/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script>
+
+    <!-- Law Firm App -->
+    <script src="../../public/main/js/template.js"></script>
+    <script src="../../public/main/js/pages/dashboard.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTables with custom options
+            var table = $('#example1').DataTable();
+        })
+    </script>
+
+</body>
+
+</html>
