@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../public/images/favicon.ico">
+
+    <title>Law Firm - Dashboard</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" href="../../public/main/css/vendors_css.css">
+
+    <!-- Style-->
+    <link rel="stylesheet" href="../../public/main/css/style.css">
+    <link rel="stylesheet" href="../../public/main/css/skin_color.css">
+
+    <!-- Fontawesome 5,6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Themify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+
+</head>
+
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+    <div class="wrapper">
+        <div id="loader"></div>
+
+
+
+        <%- include('../partials/header') %>
+            <%- include('../partials/sidebar') %>
+
+                <!-- Content Wrapper. Contains page content -->
+                <div class="content-wrapper">
+                    <div class="container-full">
+                        <!-- Content Header (Page header) -->
+                        <div class="content-header">
+                            <div class="d-flex align-items-center">
+                                <div class="me-auto">
+                                    <h4 class="page-title">Add cases</h4>
+                                    <div class="d-inline-block align-items-center">
+                                        <nav>
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item"><a href="/admin/dashboard"><i
+                                                            class="fa-solid fa-house"></i></a></li>
+                                                <li class="breadcrumb-item" aria-current="page"><a
+                                                        href="/admin/cases">Cases</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page">Add cases</li>
+                                            </ol>
+                                        </nav>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Main content -->
+                        <section class="content">
+                            <div class="row">
+                                <div class="col-lg-12 col-12">
+                                    <div class="box">
+                                        <!-- /.box-header -->
+                                        <form id="caseForm" action="/admin/addCases" class="form" method="post">
+                                            <div class="box-body">
+                                                <h4 class="box-title text-info mb-0"><i class="ti-user me-15"></i> Add
+                                                    Cases</h4>
+                                                <hr class="my-15">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Previous Date</label>
+                                                            <input required class="form-control" type="date"
+                                                                name="previous_date">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Next Date</label>
+                                                            <input required class="form-control" type="date" name="next_date">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Case No.</label>
+                                                            <input required type="text" class="form-control"
+                                                                placeholder="case number" name="case_no">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Name of the court</label>
+                                                            <input required type="text" class="form-control"
+                                                                placeholder="Court name" name="court_name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Party Name</label>
+                                                            <input required type="text" class="form-control"
+                                                                placeholder="party name" name="party_name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.box-body -->
+                                            <div class="text-center box-footer">
+                                                <button type="submit" class="btn btn-info me-1">submit
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- /.box -->
+                                </div>
+                            </div>
+                            <!-- /.row -->
+
+                        </section>
+                        <!-- /.content -->
+                    </div>
+                </div>
+                <!-- /.content-wrapper -->
+                <!-- Vendor JS -->
+                <script src="../../public/main/js/vendors.min.js"></script>
+                <script src="../../public/main/js/pages/chat-popup.js"></script>
+                <script src="../../public/assets/icons/feather-icons/feather.min.js"></script>
+
+                <script src="../../public/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script>
+
+                <!-- Law Firm App -->
+                <script src="../../public/main/js/template.js"></script>
+                <script src="../../public/main/js/pages/dashboard.js"></script>
+
+                <!-- SweetAlert2 -->
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const caseform = document.getElementById("caseForm");
+                        caseform.addEventListener("submit", function (event) {
+                            event.preventDefault();
+                            const formData = new FormData(caseform);
+                            const formDataObject = {};
+                            formData.forEach((value, key) => {
+                                formDataObject[key] = value;
+                            });
+                            fetch("/admin/addCases", {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(formDataObject),
+                            }).then(response => response.json()).then(data => {
+                                console.log(data);
+                                if (data.success == true) {
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.message,
+                                        icon: "success"
+                                    }).then(() => {
+                                        caseform.reset();
+                                        window.location.href = "/admin/cases";
+                                    })
+                                } else {
+                                    Swal.fire('Error', data.message, "error");
+                                }
+                            }).catch((error) => {
+                                Swal.fire('Error', error.message, "error");
+                            })
+                        })
+                    })
+                </script>
+
+</body>
+
+</html>
