@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../public/images/favicon.ico">
 
-    <title>Law Firm - Dashboard</title>
+    <title>Law Firm - Cases</title>
 
     <!-- Vendors Style-->
     <link rel="stylesheet" href="../../public/main/css/vendors_css.css">
@@ -97,25 +97,48 @@
                                                         <% if (casesData.length> 0) { %>
                                                             <% for (let i=0; i < casesData.length; i++) { %>
                                                                 <tr class="hover-primary">
-                                                                    <td><%= new Date(casesData[i].previous_date).toLocaleDateString("en-GB") %></td>
-                                                                    <td><%= new Date(casesData[i].next_date).toLocaleDateString("en-GB") %></td>
-                                                                    <td><%= casesData[i].case_no %></td>
-                                                                    <td><%= casesData[i].court_name %></td>
-                                                                    <td><%= casesData[i].party_name %></td>
+                                                                    <td>
+                                                                        <%= new
+                                                                            Date(casesData[i].previous_date).toLocaleDateString("en-GB")
+                                                                            %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= new
+                                                                            Date(casesData[i].next_date).toLocaleDateString("en-GB")
+                                                                            %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= casesData[i].case_no %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= casesData[i].court_name %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= casesData[i].party_name %>
+                                                                    </td>
                                                                     <td>
                                                                         <div class="btn-group">
                                                                             <a class="hover-primary dropdown-toggle no-caret"
                                                                                 data-bs-toggle="dropdown"><i
                                                                                     class="fa fa-ellipsis-h"></i></a>
+
                                                                             <div class="dropdown-menu">
-                                                                                <a class="dropdown-item" href="#">View
-                                                                                    Details</a>
+                                                                                <a class="dropdown-item" href="#">Send
+                                                                                    SMS</a>
                                                                                 <a class="dropdown-item"
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#modal-center"
-                                                                                    onclick="editItem('<%= casesData[i].court_name %>', '1 Hearing')">Edit</a>
+                                                                                    onclick="editItem(
+                                                                                        '<%= casesData[i]._id %>',
+                                                                                        '<%= casesData[i].previous_date %>',
+                                                                                        '<%= casesData[i].next_date %>',
+                                                                                        '<%= casesData[i].case_no %>',
+                                                                                        '<%= casesData[i].court_name %>',
+                                                                                        '<%= casesData[i].party_name %>'
+                                                                                        )">Edit</a>
                                                                                 <a class="dropdown-item"
-                                                                                    href="#">Delete</a>
+                                                                                    onclick="deleteItem(
+                                                                                    '<%= casesData[i]._id %>',)">Delete</a>
                                                                             </div>
                                                                         </div>
                                                                     </td>
@@ -153,22 +176,64 @@
     </div>
     <!-- ./wrapper -->
 
-    <!-- Modal -->
+    <!-- Edit Modal -->
     <div class="modal center-modal fade" id="modal-center" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="editForm">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Edit Case</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                <div class="modal-header">
+                    <h4 class="box-title text-info mb-0"><i class="ti-user me-15"></i> Edit
+                        Case Details</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="caseForm" class="form" method="post">
                     <div class="modal-body">
-                        <input type="text" id="editName" name="editName">
+                        <!-- <input type="text" id="editName" name="editName"> -->
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Previous Date</label>
+                                        <input class="form-control" type="date" name="previous_date" id="previous_date">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Next Date</label>
+                                        <input class="form-control" type="date" name="next_date" id="next_date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Case No.</label>
+                                        <input required type="text" class="form-control" placeholder="case number"
+                                            name="case_no" id="caseNo">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Name of the court</label>
+                                        <input required type="text" class="form-control" placeholder="Court name"
+                                            name="court_name" id="courtName">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Party Name</label>
+                                        <input required type="text" class="form-control" placeholder="party name"
+                                            name="party_name" id="partyName">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer modal-footer-uniform">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary float-end" onclick="saveChanges()">Save
-                            changes</button>
+                        <button type="button" class="btn btn-primary float-end" onclick="saveChanges()">Submit</button>
                     </div>
                 </form>
             </div>
@@ -183,21 +248,116 @@
 
 
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Edit Details -->
     <script>
-        function editItem(name, hearing) {
-            console.log(hearing);
-            console.log(name);
-            // Populate the edit form with data from the clicked row
-            document.getElementById('editName').value = name;
+        let dataID;
+        function editItem(id, previousDate, nextDate, caseNo, courtName, partyname,) {
+            dataID = id;
+
+            // Previous Date
+            var dateInput = document.getElementById('previous_date');
+            var dateObject = new Date(previousDate);
+            var patchedDate = dateObject.toISOString().split('T')[0];
+            dateInput.value = patchedDate;
+
+            // Next Date
+            var dateInput1 = document.getElementById('next_date');
+            var dateObject1 = new Date(nextDate);
+            var patchedDate1 = dateObject1.toISOString().split('T')[0];
+            dateInput1.value = patchedDate1;
+
+
+            document.getElementById('caseNo').value = caseNo;
+            document.getElementById('courtName').value = courtName;
+            document.getElementById('partyName').value = partyname;
         }
 
         function saveChanges() {
             // Get values from the edit form and perform further actions (e.g., submit form via AJAX)
-            const editedName = document.getElementById('editName').value;
+            const editedprevious_date = document.getElementById('previous_date').value;
+            const editednext_date = document.getElementById('next_date').value;
+            const editedcaseNo = document.getElementById('caseNo').value;
+            const editedcourtName = document.getElementById('courtName').value;
+            const editedpartyName = document.getElementById('partyName').value;
 
-            // Perform actions with the edited data (e.g., update the table, submit form via AJAX)
-            console.log(`Name: ${editedName}`);
+            // Convert the date strings to Date objects
+            const formattedPreviousDate = new Date(editedprevious_date).toISOString();
+            const formattedNextDate = new Date(editednext_date).toISOString();
+
+            const data = {
+                previous_date: formattedPreviousDate,
+                next_date: formattedNextDate,
+                case_no: editedcaseNo,
+                court_name: editedcourtName,
+                party_name: editedpartyName,
+            };
+
+            fetch(`/admin/editCase/${dataID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success == true) {
+                        $("#modal-center").modal('hide');
+                        Swal.fire({
+                            title: "Success",
+                            text: data.message,
+                            icon: "success"
+                        }).then(() => {
+                            window.location.href = "/admin/cases";
+                        })
+                    } else {
+                        $("#modal-center").modal('hide');
+                        Swal.fire('Error', data.message, "error");
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                    $("#modal-center").modal('hide');
+                    Swal.fire('Error', error.message, "error");
+                })
+        }
+    </script>
+
+
+    <!-- Delete Code -->
+    <script>
+        function deleteItem(id) {
+            console.log(id);
+
+            const confirmed = window.confirm('Are you sure you want to delete this Data..?');
+
+            if (confirmed) {
+
+                fetch(`/admin/deleteCase/${id}`, {
+                    method: 'GET'
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Success',
+                                text: data.message,
+                                icon: 'success'
+                            }).then(() => {
+                                window.location.href = "/admin/cases";
+                            });
+                        } else {
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('An error occurred:', error);
+                    });
+
+            } else {
+
+            }
         }
     </script>
 
@@ -207,11 +367,11 @@
     <script src="../../public/main/js/pages/chat-popup.js"></script>
     <script src="../../public/assets/icons/feather-icons/feather.min.js"></script>
 
-    <script src="../../public/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script>
+    <!-- <script src="../../public/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script> -->
 
     <!-- Law Firm App -->
     <script src="../../public/main/js/template.js"></script>
-    <script src="../../public/main/js/pages/dashboard.js"></script>
+    <!-- <script src="../../public/main/js/pages/dashboard.js"></script> -->
 
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>

@@ -12,10 +12,10 @@ router.get('/login', adminController.login);
 
 
 // --------------------------------Cases ---------------------------
-// Render Cases Page
 router.get('/cases', adminController.getAllCases);
-
 router.post("/addCases",adminController.addcases);
+router.post('/editCase/:caseId', adminController.editCaseDetails);
+router.get('/deleteCase/:caseId', adminController.deleteCaseDetails);
 
 
 module.exports = router;
