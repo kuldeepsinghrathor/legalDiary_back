@@ -123,9 +123,9 @@
                                                                                     class="fa fa-ellipsis-h"></i></a>
 
                                                                             <div class="dropdown-menu">
-                                                                                <a class="dropdown-item" href="#">Send
+                                                                                <a style="cursor: pointer;" class="dropdown-item" href="#">Send
                                                                                     SMS</a>
-                                                                                <a class="dropdown-item"
+                                                                                <a style="cursor: pointer;" class="dropdown-item"
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#modal-center"
                                                                                     onclick="editItem(
@@ -136,7 +136,7 @@
                                                                                         '<%= casesData[i].court_name %>',
                                                                                         '<%= casesData[i].party_name %>'
                                                                                         )">Edit</a>
-                                                                                <a class="dropdown-item"
+                                                                                <a style="cursor: pointer;" class="dropdown-item"
                                                                                     onclick="deleteItem(
                                                                                     '<%= casesData[i]._id %>',)">Delete</a>
                                                                             </div>
