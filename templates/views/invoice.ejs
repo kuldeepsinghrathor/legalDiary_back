@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice</title>
+    <title>Customer Invoice</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
@@ -93,7 +93,7 @@
         <div class="invoice-header">
             <div class="row">
                 <div class="col-xs-8">
-                    <h1>Invoice </h1>
+                    <h1>Bagarhatta's Legal Diary</h1>
                     <h4 class="text-muted">Date: <span id="datetime"></span></h4>
                 </div>
                 <div class="col-xs-4">
@@ -102,8 +102,8 @@
                             <img class="media-object logo" src="https://dummyimage.com/70x70/000/fff&text=ACME" />
                         </div>
                         <ul class="media-body list-unstyled">
-                            <li><strong>Acme Corporation</strong></li>
-                            <li>Field 3, Moon</li>
+                            <li><strong>Bagarhatta Associates</strong></li>
+                            <li>224, Adarsh Colony, Daudpur, Alwar(Raj.)</li>
                             <li>info@acme.com</li>
                         </ul>
                     </div>
@@ -112,35 +112,38 @@
         </div>
         <div class="invoice-body">
             <div class="row">
-                <div class="col-xs-5">
+                <div class="col-xs-7">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><b>Company Details</b></h3>
                         </div>
                         <div class="panel-body">
                             <dl class="dl-horizontal">
-                                <dt>Name</dt>
-                                <dd>Acme Corporation</dd>
-                                <dt>Address</dt>
-                                <dd>Field 3, Moon</dd>
-                                <dt>Phone</dt>
-                                <dd>123.4456.4567</dd>
-                                <dt>Email</dt>
-                                <dd>mainl@acme.com</dd>
+                                <dt style="margin-left: -39px;">Name:</dt>
+                                <dd style="margin-left: 55px;">Bagarhatta Associates</dd>
+
+                                <dt style="margin-left: -23px;">Address:</dt>
+                                <dd style="margin-left: 70px;">224, Adarsh Colony, Daudpur, Alwar(Raj.)</dd>
+
+                                <dt style="margin-left: -37px;">Phone:</dt>
+                                <dd style="margin-left: 55px;">9414893490</dd>
+
+                                <dt style="margin-left: -41px;">Email:</dt>
+                                <dd style="margin-left: 55px;">mainl@acme.com</dd>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-7">
+                <div class="col-xs-5">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><b>Customer Details</b></h3>
                         </div>
                         <div class="panel-body">
                             <dl class="dl-horizontal">
-                                <dt>Name</dt>
-                                <dd><%= feesData.user_name %></dd>
-                                <dt>Email</dt>
-                                <dd><%= feesData.email %></dd>
+                                <dt style="margin-left: -35px;">Name:</dt>
+                                <dd style="margin-left: 55px;"><%= feesData.user_name %></dd>
+                                <dt style="margin-left: -37px;">Email:</dt>
+                                <dd style="margin-left: 55px;"><%= feesData.email %></dd>
                         </div>
                     </div>
                 </div>
@@ -211,12 +214,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-center">
+                    <img src="../../public/images/qr_only.png" alt="qr_code">
+                </div>
             </div>
 
         </div>
         <div class="invoice-footer">
             Thank you for choosing our services.
-            <strong>~ACME~</strong>
+            <strong>~Bagarhatta Associates~</strong>
         </div>
     </div>
 
