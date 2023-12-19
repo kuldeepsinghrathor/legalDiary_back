@@ -119,7 +119,13 @@
 
                                                                             <i style="color: green;cursor: pointer;"
                                                                                 class="fa fa-pencil-square-o"
-                                                                                aria-hidden="true"></i>
+                                                                                aria-hidden="true" onclick="editItem(
+                                                                                    '<%= feesData[i]._id %>',
+                                                                                    '<%= feesData[i].advance_payment %>',
+                                                                                    '<%= feesData[i].pending_payment %>',
+                                                                                    '<%= feesData[i].total_payment %>'
+                                                                                    )" data-bs-toggle="modal"
+                                                                                data-bs-target="#modal-center"></i>
 
                                                                             <i style="color: red;cursor: pointer;margin-left: 15px;"
                                                                                 class="fa fa-print" aria-hidden="true"
@@ -150,6 +156,66 @@
                 <!-- /.content-wrapper -->
 
 
+                <!-- Edit Modal -->
+                <div class="modal center-modal fade" id="modal-center" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="box-title text-info mb-0"><i class="ti-user me-15"></i> Edit
+                                    Fees Details</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <hr>
+                            <form id="caseForm" class="form" method="post">
+                                <div class="modal-body">
+                                    <!-- <input type="text" id="editName" name="editName"> -->
+
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-label">Total Fees</label>
+                                                    <input required type="text" class="form-control"
+                                                        placeholder="Total Payment" name="total_payment"
+                                                        id="totalPayment">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Advance Fees</label>
+                                                    <input required type="text" class="form-control"
+                                                        placeholder="Advance Payment" name="advance_payment"
+                                                        id="advancePayment">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Pending Fees</label>
+                                                    <input required type="text" class="form-control"
+                                                        placeholder="Pending Payment" name="pending_payment"
+                                                        id="pendingPayment">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer modal-footer-uniform">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary float-end"
+                                        onclick="saveChanges()">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal -->
+
+
                 <!-- Vendor JS -->
                 <script src="../../public/main/js/vendors.min.js"></script>
                 <script src="../../public/main/js/pages/chat-popup.js"></script>
@@ -161,6 +227,8 @@
                 <script src="../../public/main/js/template.js"></script>
                 <!-- <script src="../../public/main/js/pages/dashboard.js"></script> -->
 
+                <!-- SweetAlert2 -->
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
                 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
                 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
@@ -176,7 +244,7 @@
                 <!-- Print Detials -->
                 <script>
                     function generatePDF(id) {
-                        fetch('/admin/download-invoice/'+id)
+                        fetch('/admin/download-invoice/' + id)
                             .then(response => response.text())
                             .then(html => {
                                 const hiddenIframe = document.createElement('iframe');
@@ -193,6 +261,58 @@
                                 }, 500);
                             });
                     }
+                </script>
+
+                <!-- Edit Details -->
+                <script>
+                    let dataID;
+                    function editItem(id, advancePayment, pendingPayment, totalPayment,) {
+                        dataID = id;
+
+                        document.getElementById('advancePayment').value = advancePayment;
+                        document.getElementById('pendingPayment').value = pendingPayment;
+                        document.getElementById('totalPayment').value = totalPayment;
+                    }
+
+                    function saveChanges() {
+                        const editedadvancePayment = document.getElementById('advancePayment').value;
+                        const editedpendingPayment = document.getElementById('pendingPayment').value;
+                        const editedtotalPayment = document.getElementById('totalPayment').value;
+
+                        const data = {
+                            advance_payment: editedadvancePayment,
+                            pending_payment: editedpendingPayment,
+                            total_payment: editedtotalPayment,
+                        };
+
+                        fetch(`/admin/editFeesDetails/${dataID}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        }).then(response => response.json())
+                            .then(data => {
+                                if (data.success == true) {
+                                    $("#modal-center").modal('hide');
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.message,
+                                        icon: "success"
+                                    }).then(() => {
+                                        window.location.href = "/admin/fees";
+                                    })
+                                } else {
+                                    $("#modal-center").modal('hide');
+                                    Swal.fire('Error', data.message, "error");
+                                }
+                            }).catch((error) => {
+                                $("#modal-center").modal('hide');
+                                Swal.fire('Error', error.message, "error");
+                            })
+
+                    }
+
                 </script>
 
 </body>

@@ -250,8 +250,6 @@ exports.logout = async (req, res) => {
     }
 }
 
-
-
 exports.login = async (req, res) => {
     try {
         return res.render('login');
@@ -260,20 +258,7 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.fees = async (req, res) => {
-    try {
-        var adminDatail = await userAdmin.findById(req.userData.userId);
-        caseModal.find({}).then((cases, error) => {
-            if (cases) {
-                return res.render('fees', { feesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
-            } else {
-                res.status(400).send({ success: false, message: 'Internal Error!' })
-            }
-        })
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
-    }
-}
+
 
 
 // --------------------------------Cases ---------------------------
@@ -335,11 +320,11 @@ exports.addcases = async (req, res) => {
 
 exports.editCaseDetails = async (req, res) => {
     try {
-        console.log(req.body);
         const { caseId } = req.params;
-        const { previous_date, next_date, case_no, court_name, party_name } = req.body;
+        const { previous_date, next_date, case_no, court_name, party_name, case_type, case_stage } = req.body;
 
-        if (!previous_date || !next_date || !case_no || !court_name || !party_name) {
+
+        if (!previous_date || !next_date || !case_no || !court_name || !party_name || !case_type || !case_stage) {
             return res.json({ success: false, message: "All fields are required" });
         }
 
@@ -349,6 +334,8 @@ exports.editCaseDetails = async (req, res) => {
             case_no,
             court_name,
             party_name,
+            case_type,
+            case_stage,
         }
 
         const editedData = await caseModal.findByIdAndUpdate(caseId, updateFields, { new: true });
@@ -386,6 +373,21 @@ exports.deleteCaseDetails = async (req, res) => {
 }
 
 
+// --------------------------------Fees ---------------------------
+exports.fees = async (req, res) => {
+    try {
+        var adminDatail = await userAdmin.findById(req.userData.userId);
+        caseModal.find({}).then((cases, error) => {
+            if (cases) {
+                return res.render('fees', { feesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
+            } else {
+                res.status(400).send({ success: false, message: 'Internal Error!' })
+            }
+        })
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+    }
+}
 
 exports.downloadFees = async (req, res) => {
     try {
@@ -420,5 +422,36 @@ exports.downloadFees = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+    }
+}
+
+exports.editFeesDetails = async (req, res) => {
+    try {
+        const { caseId } = req.params;
+        const { advance_payment, pending_payment, total_payment } = req.body;
+
+        if (!advance_payment || !pending_payment || !total_payment) {
+            return res.json({ success: false, message: "All fields are required" });
+        }
+
+        const updateFields = {
+            advance_payment,
+            pending_payment,
+            total_payment,
+        }
+
+        const editedData = await caseModal.findByIdAndUpdate(caseId, updateFields, { new: true });
+
+        if (!editedData) {
+            return res.status(404).send('Case not found');
+        } else {
+            // res.redirect(`/admin/propertyView`);
+            res.status(200).send({ success: true, message: 'Fees Details Edit Successfully!' });
+        }
+
+
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
     }
 }
