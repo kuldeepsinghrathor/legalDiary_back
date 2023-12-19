@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../public/images/favicon.ico">
+
+    <title>Law Firm - Cases</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" href="../../public/main/css/vendors_css.css">
+
+    <!-- Style-->
+    <link rel="stylesheet" href="../../public/main/css/style.css">
+    <link rel="stylesheet" href="../../public/main/css/skin_color.css">
+
+    <!-- Fontawesome 5,6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Themify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+
+    <style>
+        div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:last-child {
+            padding-left: 0;
+        }
+
+        .dataTables_filter {
+            float: none !important;
+        }
+    </style>
+
+</head>
+
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+    <div class="wrapper">
+        <div id="loader"></div>
+
+
+
+        <%- include('../partials/header') %>
+            <%- include('../partials/sidebar') %>
+
+                <!-- Content Wrapper. Contains page content -->
+                <div class="content-wrapper">
+                    <div class="container-full">
+                        <!-- Content Header (Page header) -->
+                        <div class="content-header">
+                            <div class="d-flex align-items-center">
+                                <div class="me-auto">
+                                    <h4 class="page-title">Fees Section</h4>
+                                    <div class="d-inline-block align-items-center">
+                                        <nav>
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item"><a href="/admin/dashboard"><i
+                                                            class="fa-solid fa-house"></i></a></li>
+                                                <li class="breadcrumb-item active" aria-current="page">Fees</li>
+                                            </ol>
+                                        </nav>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Main content -->
+                        <section class="content">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="box">
+                                        <div class="box-body">
+                                            <div class="table-responsive rounded card-table">
+                                                <table class="table border-no" id="example1">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>S.no</th>
+                                                            <th>User Name</th>
+                                                            <th>Party Name</th>
+                                                            <th>Advanced Given</th>
+                                                            <th>Pending Fees</th>
+                                                            <th>Total Fees</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% if (feesData.length> 0) { %>
+                                                            <% for (let i=0; i < feesData.length; i++) { %>
+                                                                <tr class="hover-primary">
+                                                                    <td>
+                                                                        <%= i+1 %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= feesData[i].user_name %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= feesData[i].party_name %>
+                                                                    </td>
+                                                                    <td class="text-success">
+                                                                        <%= feesData[i].advance_payment %>
+                                                                    </td>
+                                                                    <td class="text-danger">
+                                                                        <%= feesData[i].pending_payment %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= feesData[i].total_payment %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="btn-group">
+
+                                                                            <i style="color: green;cursor: pointer;"
+                                                                                class="fa fa-pencil-square-o"
+                                                                                aria-hidden="true"></i>
+
+                                                                            <i style="color: red;cursor: pointer;margin-left: 15px;" class="fa fa-print" aria-hidden="true"></i>
+
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <% } %>
+                                                                    <% } else { %>
+                                                                        <tr>
+                                                                            <td colspan="2" class="text-center">No
+                                                                                Fees Available
+                                                                            </td>
+                                                                        </tr>
+                                                                        <%}%>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- /.content -->
+                    </div>
+                </div>
+                <!-- /.content-wrapper -->
+
+
+                <!-- Vendor JS -->
+                <script src="../../public/main/js/vendors.min.js"></script>
+                <script src="../../public/main/js/pages/chat-popup.js"></script>
+                <script src="../../public/assets/icons/feather-icons/feather.min.js"></script>
+
+                <!-- <script src="../../public/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script> -->
+
+                <!-- Law Firm App -->
+                <script src="../../public/main/js/template.js"></script>
+                <!-- <script src="../../public/main/js/pages/dashboard.js"></script> -->
+
+
+                <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+                <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+                <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+
+                <script>
+                    $(document).ready(function () {
+                        // Initialize DataTables with custom options
+                        var table = $('#example1').DataTable();
+                    })
+                </script>
+
+</body>
+
+</html>

@@ -74,7 +74,7 @@
                                         <form id="caseForm" action="/admin/addCases" class="form" method="post">
                                             <div class="box-body">
                                                 <h4 class="box-title text-info mb-0"><i class="ti-user me-15"></i> Add
-                                                    Cases</h4>
+                                                    Case Details</h4>
                                                 <hr class="my-15">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -87,7 +87,8 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Next Date</label>
-                                                            <input required class="form-control" type="date" name="next_date">
+                                                            <input required class="form-control" type="date"
+                                                                name="next_date">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -108,11 +109,76 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Party Name</label>
                                                             <input required type="text" class="form-control"
                                                                 placeholder="party name" name="party_name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Case Type</label>
+                                                            <input required type="text" class="form-control"
+                                                                placeholder="Enter case type" name="case_type">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Case Stage</label>
+                                                            <input required type="text" class="form-control"
+                                                                placeholder="Enter case stage" name="case_stage">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="box-body">
+                                                <h4 class="box-title text-info mb-0"><i class="ti-user me-15"></i> Add
+                                                    User Details</h4>
+                                                <hr class="my-15">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">User Name</label>
+                                                            <input onkeypress="return /[A-Za-z ]/i.test(event.key)" required type="text" class="form-control"
+                                                                placeholder="Enter user name" name="user_name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Email</label>
+                                                            <input required type="text" class="form-control"
+                                                                placeholder="Enter email id" name="email">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="box-body">
+                                                <h4 class="box-title text-info mb-0"><i class="ti-user me-15"></i> Add
+                                                    Amount Details</h4>
+                                                <hr class="my-15">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Advanced Payment</label>
+                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)" required type="text" class="form-control"
+                                                                placeholder="Enter advanced payment" name="advance_payment">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Enter Pending Payment</label>
+                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)" required type="text" class="form-control"
+                                                                placeholder="Enter Pending Payment" name="pending_payment">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Enter Total Payment</label>
+                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)" required type="text" class="form-control"
+                                                                placeholder="Enter Total Payment" name="total_payment">
                                                         </div>
                                                     </div>
                                                 </div>

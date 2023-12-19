@@ -11,6 +11,8 @@ router.get('/addcases',checkAuth, adminController.addCases);
 
 router.get('/login', adminController.login);
 
+router.get('/fees',checkAuth,adminController.fees);
+
 
 // --------------------------------Cases ---------------------------
 router.get('/cases',checkAuth, adminController.getAllCases);
@@ -18,7 +20,7 @@ router.post("/addCases",checkAuth,adminController.addcases);
 router.post('/editCase/:caseId',checkAuth, adminController.editCaseDetails);
 router.get('/deleteCase/:caseId',checkAuth, adminController.deleteCaseDetails);
 router.post("/adminLogin",adminController.adminLogin);
-router.post("/sendSms",adminController.sendSms);
+router.post("/send-sms",adminController.sendSms);
 router.get("/logout",adminController.logout);
 
 

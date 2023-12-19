@@ -16,6 +16,27 @@ const cases = new Schema({
     },
     party_name:{
         type:String
+    },
+    case_type:{
+        type:String
+    },
+    case_stage:{
+        type:String
+    },
+    user_name:{
+        type:String
+    },
+    email:{
+        type:String
+    },
+    advance_payment:{
+        type:String
+    },
+    pending_payment:{
+        type:String
+    },
+    total_payment:{
+        type:String
     }
 })
 

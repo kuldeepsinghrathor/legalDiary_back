@@ -9,13 +9,14 @@ exports.getAdminDashboard = async (req, res) => {
     try {
         var adminDatail = await userAdmin.findById(req.userData.userId);
         var caseLength = await caseModal.find({});
-        return res.render('dashboard',{casesLength:caseLength.length,adminName:adminDatail.userName,adminPhoto:adminDatail.profilePhoto.path});
+        return res.render('dashboard', { casesLength: caseLength.length, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
     }
 }
 
-exports.sendSms = async () =>{
+exports.sendSms = async () => {
+    console.log("aa");
     // Create a transporter object using your SMTP settings
     const transporter = nodemailer.createTransport({
         service: 'Gmail', // You can use other services as well
@@ -28,8 +29,8 @@ exports.sendSms = async () =>{
     // Define email data
     const mailOptions = {
         from: 'girishimg574@gmail.com',
-        to: 'kuldeep.img123@gmail.com',
-        subject: 'Welcome to The Furniture Mart',
+        to: 'vstwjpw@gmail.com',
+        subject: 'Message from HIMANSHU BAGARHATTA LEGAL DIARY',
         html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
          <head>
@@ -216,7 +217,7 @@ exports.sendSms = async () =>{
     });
 }
 
-exports.adminLogin = async(req,res) =>{
+exports.adminLogin = async (req, res) => {
     userAdmin.find({ email: req.body.email }).exec().then((result) => {
         if (result.length < 1) {
             return res.json({ success: false, message: 'User Not Found!' });
@@ -228,7 +229,7 @@ exports.adminLogin = async(req,res) =>{
                         userId: user._id,
                     }
                     const token = jwt.sign(payload, "LEGALDIARYAUTH")
-                    res.cookie("token",token,{httpOnly:true,maxAge:86400000});
+                    res.cookie("token", token, { httpOnly: true, maxAge: 86400000 });
                     return res.json({ success: true, token: token, message: 'Login Successfully !' })
                 } else {
                     return res.json({ success: false, message: 'Password does not match!' })
@@ -240,7 +241,7 @@ exports.adminLogin = async(req,res) =>{
     })
 }
 
-exports.logout = async (req,res) =>{
+exports.logout = async (req, res) => {
     try {
         res.clearCookie("token");
         res.redirect("/admin/login");
@@ -259,13 +260,28 @@ exports.login = async (req, res) => {
     }
 }
 
+exports.fees = async (req, res) => {
+    try {
+        var adminDatail = await userAdmin.findById(req.userData.userId);
+        caseModal.find({}).then((cases, error) => {
+            if (cases) {
+                return res.render('fees', { feesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
+            } else {
+                res.status(400).send({ success: false, message: 'Internal Error!' })
+            }
+        })
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+    }
+}
+
 
 // --------------------------------Cases ---------------------------
 // Render Add Case Page
 exports.addCases = async (req, res) => {
     try {
         var adminDatail = await userAdmin.findById(req.userData.userId);
-        return res.render('addcases',{adminName:adminDatail.userName,adminPhoto:adminDatail.profilePhoto.path});
+        return res.render('addcases', { adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
     }
@@ -277,8 +293,10 @@ exports.getAllCases = async (req, res) => {
         var adminDatail = await userAdmin.findById(req.userData.userId);
         caseModal.find({}).then((cases, error) => {
             const careerLength = cases.length;
+            var datetime = new Date();
+
             if (cases) {
-                return res.render('cases', { message: 'cases fetch successfully', careerLength: careerLength, casesData: cases , adminName:adminDatail.userName,adminPhoto:adminDatail.profilePhoto.path });
+                return res.render('cases', { message: 'cases fetch successfully', careerLength: careerLength, casesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path,currentDate:datetime.toISOString().slice(0,10)});
             } else {
                 res.status(400).send({ success: false, message: 'Internal Error!' })
             }
@@ -298,7 +316,14 @@ exports.addcases = async (req, res) => {
                 next_date: new Date(req.body.next_date),
                 case_no: req.body.case_no,
                 court_name: req.body.court_name,
-                party_name: req.body.party_name
+                party_name: req.body.party_name,
+                case_type:req.body.case_type,
+                case_stage:req.body.case_stage,
+                user_name:req.body.user_name,
+                email:req.body.email,
+                advance_payment:req.body.advance_payment,
+                pending_payment:req.body.pending_payment,
+                total_payment:req.body.total_payment
             })
             await cases.save();
             res.json({ success: true, message: "Case added successfully" });

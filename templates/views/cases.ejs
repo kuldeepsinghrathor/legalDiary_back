@@ -67,6 +67,8 @@
                                                 <li class="breadcrumb-item"><a href="/admin/dashboard"><i
                                                             class="fa-solid fa-house"></i></a></li>
                                                 <li class="breadcrumb-item active" aria-current="page">Cases</li>
+                                                <button onclick="downloadExcel()" style="margin-left: 628px;" class="btn btn-primary">Download File &nbsp;<i
+                                                    class="fas fa-download"></i></button>
                                             </ol>
                                         </nav>
                                     </div>
@@ -85,11 +87,15 @@
                                                 <table class="table border-no" id="example1">
                                                     <thead>
                                                         <tr>
+                                                            <th>S.no.</th>
                                                             <th>Previous Date</th>
-                                                            <th>Next Date</th>
-                                                            <th>Case No.</th>
                                                             <th>Name of the court</th>
+                                                            <th>Case No.</th>
                                                             <th>Party Name</th>
+                                                            <th>Case Type</th>
+                                                            <th>Case Stage</th>
+                                                            <th>Current Date</th>
+                                                            <th>Next Date</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
@@ -98,9 +104,30 @@
                                                             <% for (let i=0; i < casesData.length; i++) { %>
                                                                 <tr class="hover-primary">
                                                                     <td>
+                                                                        <%= i+1 %>
+                                                                    </td>
+                                                                    <td>
                                                                         <%= new
                                                                             Date(casesData[i].previous_date).toLocaleDateString("en-GB")
                                                                             %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= casesData[i].court_name %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= casesData[i].case_no %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= casesData[i].party_name %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= casesData[i].case_type %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= casesData[i].case_stage %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= currentDate %>
                                                                     </td>
                                                                     <td>
                                                                         <%= new
@@ -108,38 +135,27 @@
                                                                             %>
                                                                     </td>
                                                                     <td>
-                                                                        <%= casesData[i].case_no %>
-                                                                    </td>
-                                                                    <td>
-                                                                        <%= casesData[i].court_name %>
-                                                                    </td>
-                                                                    <td>
-                                                                        <%= casesData[i].party_name %>
-                                                                    </td>
-                                                                    <td>
                                                                         <div class="btn-group">
-                                                                            <a class="hover-primary dropdown-toggle no-caret"
-                                                                                data-bs-toggle="dropdown"><i
-                                                                                    class="fa fa-ellipsis-h"></i></a>
+                                                                            <i style="color: orange;cursor: pointer;margin-left: 15px;"
+                                                                                class="fa fa-commenting-o"
+                                                                                aria-hidden="true"></i>
 
-                                                                            <div class="dropdown-menu">
-                                                                                <a style="cursor: pointer;" class="dropdown-item" href="#">Send
-                                                                                    SMS</a>
-                                                                                <a style="cursor: pointer;" class="dropdown-item"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#modal-center"
-                                                                                    onclick="editItem(
-                                                                                        '<%= casesData[i]._id %>',
-                                                                                        '<%= casesData[i].previous_date %>',
-                                                                                        '<%= casesData[i].next_date %>',
-                                                                                        '<%= casesData[i].case_no %>',
-                                                                                        '<%= casesData[i].court_name %>',
-                                                                                        '<%= casesData[i].party_name %>'
-                                                                                        )">Edit</a>
-                                                                                <a style="cursor: pointer;" class="dropdown-item"
-                                                                                    onclick="deleteItem(
-                                                                                    '<%= casesData[i]._id %>',)">Delete</a>
-                                                                            </div>
+                                                                            <i data-bs-toggle="modal"
+                                                                                data-bs-target="#modal-center" onclick="editItem(
+                                                                                '<%= casesData[i]._id %>',
+                                                                                '<%= casesData[i].previous_date %>',
+                                                                                '<%= casesData[i].next_date %>',
+                                                                                '<%= casesData[i].case_no %>',
+                                                                                '<%= casesData[i].court_name %>',
+                                                                                '<%= casesData[i].party_name %>'
+                                                                                )" style="color: green;cursor: pointer;margin-left: 15px;"
+                                                                                class="fa fa-pencil-square-o"
+                                                                                aria-hidden="true"></i>
+
+                                                                            <i onclick="deleteItem(
+                                                                                '<%= casesData[i]._id %>',)"
+                                                                                style="color: red;cursor: pointer;margin-left: 15px;" class="fa fa-trash"
+                                                                                aria-hidden="true"></i>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -250,6 +266,22 @@
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- EJS template or HTML file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+
+    <script>
+        function downloadExcel() {
+            const table = document.getElementById('example1');
+            console.log(table);
+            const ws = XLSX.utils.table_to_sheet(table);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+
+            // Use XLSX.writeFile to directly save the file
+            XLSX.writeFile(wb, 'cases-list.xlsx');
+        }
+    </script>
 
     <!-- Edit Details -->
     <script>
