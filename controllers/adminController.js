@@ -296,7 +296,7 @@ exports.getAllCases = async (req, res) => {
             var datetime = new Date();
 
             if (cases) {
-                return res.render('cases', { message: 'cases fetch successfully', careerLength: careerLength, casesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path,currentDate:datetime.toISOString().slice(0,10)});
+                return res.render('cases', { message: 'cases fetch successfully', careerLength: careerLength, casesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path, currentDate: datetime.toISOString().slice(0, 10) });
             } else {
                 res.status(400).send({ success: false, message: 'Internal Error!' })
             }
@@ -317,13 +317,13 @@ exports.addcases = async (req, res) => {
                 case_no: req.body.case_no,
                 court_name: req.body.court_name,
                 party_name: req.body.party_name,
-                case_type:req.body.case_type,
-                case_stage:req.body.case_stage,
-                user_name:req.body.user_name,
-                email:req.body.email,
-                advance_payment:req.body.advance_payment,
-                pending_payment:req.body.pending_payment,
-                total_payment:req.body.total_payment
+                case_type: req.body.case_type,
+                case_stage: req.body.case_stage,
+                user_name: req.body.user_name,
+                email: req.body.email,
+                advance_payment: req.body.advance_payment,
+                pending_payment: req.body.pending_payment,
+                total_payment: req.body.total_payment
             })
             await cases.save();
             res.json({ success: true, message: "Case added successfully" });
@@ -378,6 +378,44 @@ exports.deleteCaseDetails = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Data not found' });
         } else {
             res.status(200).send({ success: true, message: 'Case Data Deleted Successfully!' });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+    }
+}
+
+
+
+exports.downloadFees = async (req, res) => {
+    try {
+
+        const caseId = req.params.id;
+
+        var adminDatail = await userAdmin.findById(req.userData.userId);
+        const selectedCase = await caseModal.findById({ _id: caseId });
+
+        if (selectedCase) {
+            res.render('invoice', {
+                feesData: {
+                    previous_date: selectedCase.previous_date,
+                    next_date: selectedCase.next_date,
+                    case_no: selectedCase.case_no,
+                    court_name: selectedCase.court_name,
+                    party_name: selectedCase.party_name,
+                    case_type: selectedCase.case_type,
+                    case_stage: selectedCase.case_stage,
+                    user_name: selectedCase.user_name,
+                    email: selectedCase.email,
+                    advance_payment: selectedCase.advance_payment,
+                    pending_payment: selectedCase.pending_payment,
+                    total_payment: selectedCase.total_payment
+                },
+                adminName: adminDatail.userName,
+                adminPhoto: adminDatail.profilePhoto.path
+            });
+        } else {
+            res.status(404).send({ success: false, message: 'Case not found!' });
         }
 
     } catch (error) {

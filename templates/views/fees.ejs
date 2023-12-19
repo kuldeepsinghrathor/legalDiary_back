@@ -121,7 +121,9 @@
                                                                                 class="fa fa-pencil-square-o"
                                                                                 aria-hidden="true"></i>
 
-                                                                            <i style="color: red;cursor: pointer;margin-left: 15px;" class="fa fa-print" aria-hidden="true"></i>
+                                                                            <i style="color: red;cursor: pointer;margin-left: 15px;"
+                                                                                class="fa fa-print" aria-hidden="true"
+                                                                                onclick="generatePDF('<%= feesData[i]._id %>')"></i>
 
                                                                         </div>
                                                                     </td>
@@ -169,6 +171,28 @@
                         // Initialize DataTables with custom options
                         var table = $('#example1').DataTable();
                     })
+                </script>
+
+                <!-- Print Detials -->
+                <script>
+                    function generatePDF(id) {
+                        fetch('/admin/download-invoice/'+id)
+                            .then(response => response.text())
+                            .then(html => {
+                                const hiddenIframe = document.createElement('iframe');
+                                hiddenIframe.style.display = 'none';
+                                document.body.appendChild(hiddenIframe);
+
+                                // Write the HTML content to the iframe
+                                hiddenIframe.contentDocument.write(html);
+                                hiddenIframe.contentDocument.close();
+
+                                // Trigger the print dialog
+                                setTimeout(() => {
+                                    hiddenIframe.contentWindow.print();
+                                }, 500);
+                            });
+                    }
                 </script>
 
 </body>

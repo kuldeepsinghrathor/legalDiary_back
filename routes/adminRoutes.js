@@ -13,6 +13,8 @@ router.get('/login', adminController.login);
 
 router.get('/fees',checkAuth,adminController.fees);
 
+router.get('/download-invoice/:id',checkAuth,adminController.downloadFees);
+
 
 // --------------------------------Cases ---------------------------
 router.get('/cases',checkAuth, adminController.getAllCases);
