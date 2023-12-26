@@ -1470,10 +1470,10 @@ exports.login = async (req, res) => {
 
 // --------------------------------Cases ---------------------------
 // Render Add Case Page
-exports.addCases = async (req, res) => {
+exports.casesAdd = async (req, res) => {
   try {
     var adminDatail = await userAdmin.findById(req.userData.userId);
-    res.render('addcases', { adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
+    return res.render('addcases', { adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
   }
