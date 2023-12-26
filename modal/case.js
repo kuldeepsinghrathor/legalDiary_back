@@ -37,6 +37,9 @@ const cases = new Schema({
     },
     total_payment:{
         type:String
+    },
+    case_status:{
+        type:String
     }
 })
 

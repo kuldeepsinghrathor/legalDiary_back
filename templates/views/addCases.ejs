@@ -80,6 +80,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Previous Date</label>
+                                                            <label class="form-label">Previous Date</label>
                                                             <input required class="form-control" type="date"
                                                                 name="previous_date">
                                                         </div>
@@ -103,7 +104,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Name of the court</label>
-                                                            <input required type="text" class="form-control"
+                                                            <input onkeypress="return /[A-Za-z ]/i.test(event.key)" required type="text" class="form-control"
                                                                 placeholder="Court name" name="court_name">
                                                         </div>
                                                     </div>
@@ -112,24 +113,35 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Party Name</label>
-                                                            <input required type="text" class="form-control"
+                                                            <input onkeypress="return /[A-Za-z ]/i.test(event.key)" required type="text" class="form-control"
                                                                 placeholder="party name" name="party_name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Case Type</label>
-                                                            <input required type="text" class="form-control"
+                                                            <input onkeypress="return /[A-Za-z ]/i.test(event.key)" required type="text" class="form-control"
                                                                 placeholder="Enter case type" name="case_type">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Case Stage</label>
-                                                            <input required type="text" class="form-control"
+                                                            <input onkeypress="return /[A-Za-z ]/i.test(event.key)" required type="text" class="form-control"
                                                                 placeholder="Enter case stage" name="case_stage">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Case Status</label>
+                                                            <select name="case_status" onclick="Searching()" id="Disabled"
+                                                                class="form-control select2" style="width: 100%;">
+                                                                <option value="1" selected="selected">Case Disposed</option>
+                                                                <option value="2">Case In Favour</option>
+                                                                <option value="3">Case In Against</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -142,7 +154,8 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">User Name</label>
-                                                            <input onkeypress="return /[A-Za-z ]/i.test(event.key)" required type="text" class="form-control"
+                                                            <input onkeypress="return /[A-Za-z ]/i.test(event.key)"
+                                                                required type="text" class="form-control"
                                                                 placeholder="Enter user name" name="user_name">
                                                         </div>
                                                     </div>
@@ -163,27 +176,31 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="form-label">Advanced Payment</label>
-                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)" required type="text" class="form-control"
-                                                                placeholder="Enter advanced payment" name="advance_payment">
+                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)"
+                                                                required type="text" class="form-control"
+                                                                placeholder="Enter advanced payment"
+                                                                name="advance_payment">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="form-label">Enter Pending Payment</label>
-                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)" required type="text" class="form-control"
-                                                                placeholder="Enter Pending Payment" name="pending_payment">
+                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)"
+                                                                required type="text" class="form-control"
+                                                                placeholder="Enter Pending Payment"
+                                                                name="pending_payment">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="form-label">Enter Total Payment</label>
-                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)" required type="text" class="form-control"
+                                                            <input onkeypress="return /[0-9 ]/i.test(event.key)"
+                                                                required type="text" class="form-control"
                                                                 placeholder="Enter Total Payment" name="total_payment">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- /.box-body -->
                                             <div class="text-center box-footer">
                                                 <button type="submit" class="btn btn-info me-1">submit
                                                 </button>
@@ -204,6 +221,14 @@
                 <script src="../../public/main/js/vendors.min.js"></script>
                 <script src="../../public/main/js/pages/chat-popup.js"></script>
                 <script src="../../public/assets/icons/feather-icons/feather.min.js"></script>
+
+                <script>
+                    function Searching() {
+                        var selectElement = document.getElementById("Disabled");
+                        var selectedValue = selectElement.value;
+                        console.log(selectedValue);
+                    }
+                </script>
 
                 <script src="../../public/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script>
 

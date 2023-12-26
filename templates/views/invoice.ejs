@@ -93,7 +93,7 @@
         <div class="invoice-header">
             <div class="row">
                 <div class="col-xs-8">
-                    <h1>Bagarhatta's Legal Diary</h1>
+                    <h1>Bagarhatta's Legal Diary Software</h1>
                     <h4 class="text-muted">Date: <span id="datetime"></span></h4>
                 </div>
                 <div class="col-xs-4">
@@ -141,9 +141,13 @@
                         <div class="panel-body">
                             <dl class="dl-horizontal">
                                 <dt style="margin-left: -35px;">Name:</dt>
-                                <dd style="margin-left: 55px;"><%= feesData.user_name %></dd>
+                                <dd style="margin-left: 55px;">
+                                    <%= feesData.user_name %>
+                                </dd>
                                 <dt style="margin-left: -37px;">Email:</dt>
-                                <dd style="margin-left: 55px;"><%= feesData.email %></dd>
+                                <dd style="margin-left: 55px;">
+                                    <%= feesData.email %>
+                                </dd>
                         </div>
                     </div>
                 </div>
@@ -164,16 +168,24 @@
                     <tbody>
                         <tr>
                             <td>
-                                <span class="mono"><%= feesData.case_no %></span>
+                                <span class="mono">
+                                    <%= feesData.case_no %>
+                                </span>
                             </td>
                             <td>
-                                <span class="mono"><%= feesData.court_name %></span>
+                                <span class="mono">
+                                    <%= feesData.court_name %>
+                                </span>
                             </td>
                             <td>
-                                <span class="mono"><%= feesData.case_type %></span>
+                                <span class="mono">
+                                    <%= feesData.case_type %>
+                                </span>
                             </td>
                             <td>
-                                <span class="mono"><%= feesData.case_stage %></span>
+                                <span class="mono">
+                                    <%= feesData.case_stage %>
+                                </span>
                             </td>
                         </tr>
 
@@ -191,9 +203,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th class="text-center">₹<%= feesData.total_payment %></th>
-                            <th class="text-center">₹<%= feesData.advance_payment %></th>
-                            <th class="text-center">₹<%= feesData.pending_payment %></th>
+                            <th class="text-center">₹<%= feesData.total_payment %>
+                            </th>
+                            <th class="text-center">₹<%= feesData.advance_payment %>
+                            </th>
+                            <th class="text-center">₹<%= feesData.pending_payment %>
+                            </th>
                         </tr>
                     </tbody>
                 </table>
@@ -207,15 +222,25 @@
                         <div class="panel-body">
                             <p>For your convenience, you may deposite the final ammount at one of our banks</p>
                             <ul class="list-unstyled">
-                                <li>Alpha Bank - <span class="mono">MO123456789456123</span></li>
-                                <li>Beta Bank - <span class="mono">MO123456789456123</span></li>
+                                <li>Payment From UPI - <span class="mono">himanshu.adv.bagarhatta@okicici</span></li>
+                                <li>ICICI Bank - <span class="mono">MO123456789456123</span></li>
                                 <li>Gamma Bank - <span class="mono">MO123456789456123</span></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="text-center">
-                    <img src="../../public/images/qr_only.png" alt="qr_code">
+                    <img style="height: 350px;width: 350px;" src="../../public/images/qr_only.png" alt="qr_code">
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <hr>
+                        <h3>Customer signature</h3>
+                    </div>
+                    <div>
+                        <hr>
+                        <h3>Advocate signature</h3>
+                    </div>
                 </div>
             </div>
 

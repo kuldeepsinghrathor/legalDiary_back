@@ -17,7 +17,7 @@ router.post("/addCases",checkAuth,adminController.addcases);
 router.post('/editCase/:caseId',checkAuth, adminController.editCaseDetails);
 router.get('/deleteCase/:caseId',checkAuth, adminController.deleteCaseDetails);
 router.post("/adminLogin",adminController.adminLogin);
-router.post("/send-sms",adminController.sendSms);
+router.get("/send-sms/:id",checkAuth,adminController.sendSms);
 
 
 // --------------------------------Fees ---------------------------

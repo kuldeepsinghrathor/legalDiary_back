@@ -97,6 +97,7 @@
                                                             <th>Party Name</th>
                                                             <th>Case Type</th>
                                                             <th>Case Stage</th>
+                                                            <th>Case Status</th>
                                                             <th>Current Date</th>
                                                             <th>Next Date</th>
                                                             <th>Action</th>
@@ -130,6 +131,18 @@
                                                                         <%= casesData[i].case_stage %>
                                                                     </td>
                                                                     <td>
+                                                                        <% if (casesData[i].case_status == 1) { %>
+                                                                            <!-- Content to show when condition is true -->
+                                                                            Case Disposed
+                                                                        <% } else if (casesData[i].case_status == 2) { %>
+                                                                            <!-- Content to show when condition is false -->
+                                                                            Case in favour
+                                                                        <% } else { %>
+                                                                            <!-- Content to show when none of the conditions are true -->
+                                                                            Case in against
+                                                                        <% } %>
+                                                                    </td>
+                                                                    <td>
                                                                         <%= currentDate %>
                                                                     </td>
                                                                     <td>
@@ -139,7 +152,8 @@
                                                                     </td>
                                                                     <td>
                                                                         <div class="btn-group">
-                                                                            <i style="color: orange;cursor: pointer;margin-left: 15px;"
+                                                                            <i onclick="sendSms('<%= casesData[i]._id %>')"
+                                                                                style="color: orange;cursor: pointer;margin-left: 15px;"
                                                                                 class="fa fa-commenting-o"
                                                                                 aria-hidden="true"></i>
 
@@ -186,10 +200,6 @@
                     </div>
                 </div>
                 <!-- /.content-wrapper -->
-
-
-
-                <%- include('../partials/footer') %>
 
 
 
@@ -444,6 +454,17 @@
             // Initialize DataTables with custom options
             var table = $('#example1').DataTable();
         })
+    </script>
+
+    <script>
+        function sendSms(id) {
+            alert(id);
+            console.log(id);
+            fetch('/admin/send-sms/' + id)
+                .then(response => {
+                    console.log(response);
+                })
+        }
     </script>
 
 </body>

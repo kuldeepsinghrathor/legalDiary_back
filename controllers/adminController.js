@@ -6,256 +6,1463 @@ const nodemailer = require("nodemailer");
 // --------------------------------Dashboard ---------------------------
 // Render Dashboard Page
 exports.getAdminDashboard = async (req, res) => {
-    try {
-        var adminDatail = await userAdmin.findById(req.userData.userId);
-        var caseLength = await caseModal.find({});
-        return res.render('dashboard', { casesLength: caseLength.length, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  try {
+    var adminDatail = await userAdmin.findById(req.userData.userId);
+    var caseLength = await caseModal.find({});
+    var caseDisposed = 0;
+    var caseFavour = 0;
+    var caseAgainst = 0;
+
+    for (var i = 0; i < caseLength.length; i++) {
+      if (caseLength[i]?.case_status == 1) {
+        caseDisposed++;
+      } else if (caseLength[i]?.case_status == 2) {
+        caseFavour++;
+      } else {
+        caseAgainst++;
+      }
     }
+
+    return res.render('dashboard', { disposedLength: caseDisposed, favourLength: caseFavour, againstlength: caseAgainst, casesLength: caseLength.length, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
 
-exports.sendSms = async () => {
+exports.sendSms = async (req, res) => {
+  try {
     console.log("aa");
+
+    const caseId = req.params.id;
+    console.log(caseId);
+
+    var adminDatail = await userAdmin.findById(req.userData.userId);
+    const selectedCase = await caseModal.findById({ _id: caseId });
+
+    console.log(adminDatail);
+    console.log(selectedCase);
+
     // Create a transporter object using your SMTP settings
     const transporter = nodemailer.createTransport({
-        service: 'Gmail', // You can use other services as well
-        auth: {
-            user: 'girishimg574@gmail.com',
-            pass: 'ceiukxwliqiimwga',
-        },
+      service: 'Gmail', // You can use other services as well
+      auth: {
+        user: 'girishimg574@gmail.com',
+        pass: 'ceiukxwliqiimwga',
+      },
     });
 
     // Define email data
     const mailOptions = {
-        from: 'girishimg574@gmail.com',
-        to: 'vstwjpw@gmail.com',
-        subject: 'Message from HIMANSHU BAGARHATTA LEGAL DIARY',
-        html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-        <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
-         <head>
-          <meta charset="UTF-8">
-          <meta content="width=device-width, initial-scale=1" name="viewport">
-          <meta name="x-apple-disable-message-reformatting">
-          <meta http-equiv="X-UA-Compatible" content="IE=edge">
-          <meta content="telephone=no" name="format-detection">
-          <title>New email template 2023-12-12</title><!--[if (mso 16)]>
-            <style type="text/css">
-            a {text-decoration: none;}
-            </style>
-            <![endif]--><!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]--><!--[if gte mso 9]>
-        <xml>
-            <o:OfficeDocumentSettings>
-            <o:AllowPNG></o:AllowPNG>
-            <o:PixelsPerInch>96</o:PixelsPerInch>
-            </o:OfficeDocumentSettings>
-        </xml>
-        <![endif]--><!--[if !mso]><!-- -->
-          <link href="https://fonts.googleapis.com/css2?family=Changa:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-          <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet"><!--<![endif]-->
-          <style type="text/css">
-        #outlook a {
-            padding:0;
-        }
-        .es-button {
-            mso-style-priority:100!important;
-            text-decoration:none!important;
-        }
-        a[x-apple-data-detectors] {
-            color:inherit!important;
-            text-decoration:none!important;
-            font-size:inherit!important;
-            font-family:inherit!important;
-            font-weight:inherit!important;
-            line-height:inherit!important;
-        }
-        .es-desk-hidden {
-            display:none;
-            float:left;
-            overflow:hidden;
-            width:0;
-            max-height:0;
-            line-height:0;
-            mso-hide:all;
-        }
-        @media only screen and (max-width:600px) {p, ul li, ol li, a { line-height:150%!important } h1, h2, h3, h1 a, h2 a, h3 a { line-height:120%!important } h1 { font-size:40px!important; text-align:left } h2 { font-size:28px!important; text-align:left } h3 { font-size:18px!important; text-align:left } .es-header-body h1 a, .es-content-body h1 a, .es-footer-body h1 a { font-size:40px!important; text-align:left } .es-header-body h2 a, .es-content-body h2 a, .es-footer-body h2 a { font-size:28px!important; text-align:left } .es-header-body h3 a, .es-content-body h3 a, .es-footer-body h3 a { font-size:18px!important; text-align:left } .es-menu td a { font-size:14px!important } .es-header-body p, .es-header-body ul li, .es-header-body ol li, .es-header-body a { font-size:14px!important } .es-content-body p, .es-content-body ul li, .es-content-body ol li, .es-content-body a { font-size:14px!important } .es-footer-body p, .es-footer-body ul li, .es-footer-body ol li, .es-footer-body a { font-size:12px!important } .es-infoblock p, .es-infoblock ul li, .es-infoblock ol li, .es-infoblock a { font-size:12px!important } *[class="gmail-fix"] { display:none!important } .es-m-txt-c, .es-m-txt-c h1, .es-m-txt-c h2, .es-m-txt-c h3 { text-align:center!important } .es-m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2, .es-m-txt-r h3 { text-align:right!important } .es-m-txt-l, .es-m-txt-l h1, .es-m-txt-l h2, .es-m-txt-l h3 { text-align:left!important } .es-m-txt-r img, .es-m-txt-c img, .es-m-txt-l img { display:inline!important } .es-button-border { display:inline-block!important } a.es-button, button.es-button { font-size:14px!important; display:inline-block!important } .es-adaptive table, .es-left, .es-right { width:100%!important } .es-content table, .es-header table, .es-footer table, .es-content, .es-footer, .es-header { width:100%!important; max-width:600px!important } .es-adapt-td { display:block!important; width:100%!important } .adapt-img { width:100%!important; height:auto!important } .es-m-p0 { padding:0!important } .es-m-p0r { padding-right:0!important } .es-m-p0l { padding-left:0!important } .es-m-p0t { padding-top:0!important } .es-m-p0b { padding-bottom:0!important } .es-m-p20b { padding-bottom:20px!important } .es-mobile-hidden, .es-hidden { display:none!important } tr.es-desk-hidden, td.es-desk-hidden, table.es-desk-hidden { width:auto!important; overflow:visible!important; float:none!important; max-height:inherit!important; line-height:inherit!important } tr.es-desk-hidden { display:table-row!important } table.es-desk-hidden { display:table!important } td.es-desk-menu-hidden { display:table-cell!important } .es-menu td { width:1%!important } table.es-table-not-adapt, .esd-block-html table { width:auto!important } table.es-social { display:inline-block!important } table.es-social td { display:inline-block!important } .es-desk-hidden { display:table-row!important; width:auto!important; overflow:visible!important; max-height:inherit!important } .es-m-p5 { padding:5px!important } .es-m-p5t { padding-top:5px!important } .es-m-p5b { padding-bottom:5px!important } .es-m-p5r { padding-right:5px!important } .es-m-p5l { padding-left:5px!important } .es-m-p10 { padding:10px!important } .es-m-p10t { padding-top:10px!important } .es-m-p10b { padding-bottom:10px!important } .es-m-p10r { padding-right:10px!important } .es-m-p10l { padding-left:10px!important } .es-m-p15 { padding:15px!important } .es-m-p15t { padding-top:15px!important } .es-m-p15b { padding-bottom:15px!important } .es-m-p15r { padding-right:15px!important } .es-m-p15l { padding-left:15px!important } .es-m-p20 { padding:20px!important } .es-m-p20t { padding-top:20px!important } .es-m-p20r { padding-right:20px!important } .es-m-p20l { padding-left:20px!important } .es-m-p25 { padding:25px!important } .es-m-p25t { padding-top:25px!important } .es-m-p25b { padding-bottom:25px!important } .es-m-p25r { padding-right:25px!important } .es-m-p25l { padding-left:25px!important } .es-m-p30 { padding:30px!important } .es-m-p30t { padding-top:30px!important } .es-m-p30b { padding-bottom:30px!important } .es-m-p30r { padding-right:30px!important } .es-m-p30l { padding-left:30px!important } .es-m-p35 { padding:35px!important } .es-m-p35t { padding-top:35px!important } .es-m-p35b { padding-bottom:35px!important } .es-m-p35r { padding-right:35px!important } .es-m-p35l { padding-left:35px!important } .es-m-p40 { padding:40px!important } .es-m-p40t { padding-top:40px!important } .es-m-p40b { padding-bottom:40px!important } .es-m-p40r { padding-right:40px!important } .es-m-p40l { padding-left:40px!important } .es-m-margin { padding-left:10px!important; padding-right:10px!important; padding-top:0px!important; padding-bottom:0px!important } }
-        @media screen and (max-width:384px) {.mail-message-content { width:414px!important } }
+      from: 'girishimg574@gmail.com',
+      to: 'vstwjpw@gmail.com',
+      subject: 'Message from HIMANSHU BAGARHATTA LEGAL DIARY',
+      html: `<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+      <html style="margin: 0;padding: 0;" xmlns="http://www.w3.org/1999/xhtml">
+      
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        <!--[if !mso]><!-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" /><!--<![endif]-->
+        <meta name="viewport" content="width=device-width" />
+        <style type="text/css">
+          @media only screen and (min-width: 620px) {
+            .column {}
+      
+            .wrapper {
+              min-width: 600px !important
+            }
+      
+            .wrapper h1 {}
+      
+            .wrapper h1 {
+              font-size: 34px !important;
+              line-height: 43px !important
+            }
+      
+            .wrapper h2 {}
+      
+            .wrapper h2 {
+              font-size: 24px !important;
+              line-height: 32px !important
+            }
+      
+            .wrapper h3 {}
+      
+            .wrapper h3 {
+              font-size: 18px !important;
+              line-height: 26px !important
+            }
+      
+            .wrapper .size-8,
+            .wrapper .size-8-m,
+            .wrapper .size-8-l {
+              font-size: 8px !important;
+              line-height: 14px !important
+            }
+      
+            .wrapper .size-8-m {
+              line-height: 16px !important
+            }
+      
+            .wrapper .size-8-l {
+              line-height: 24px !important
+            }
+      
+            .wrapper .size-9,
+            .wrapper .size-9-m,
+            .wrapper .size-9-l {
+              font-size: 9px !important;
+              line-height: 16px !important
+            }
+      
+            .wrapper .size-9-m {
+              line-height: 18px !important
+            }
+      
+            .wrapper .size-9-l {
+              line-height: 27px !important
+            }
+      
+            .wrapper .size-10,
+            .wrapper .size-10-m,
+            .wrapper .size-10-l {
+              font-size: 10px !important;
+              line-height: 18px !important
+            }
+      
+            .wrapper .size-10-m {
+              line-height: 20px !important
+            }
+      
+            .wrapper .size-10-l {
+              line-height: 30px !important
+            }
+      
+            .wrapper .size-11,
+            .wrapper .size-11-m,
+            .wrapper .size-11-l {
+              font-size: 11px !important;
+              line-height: 19px !important
+            }
+      
+            .wrapper .size-11-m {
+              line-height: 22px !important
+            }
+      
+            .wrapper .size-11-l {
+              line-height: 33px !important
+            }
+      
+            .wrapper .size-12,
+            .wrapper .size-12-m,
+            .wrapper .size-12-l {
+              font-size: 12px !important;
+              line-height: 19px !important
+            }
+      
+            .wrapper .size-12-m {
+              line-height: 24px !important
+            }
+      
+            .wrapper .size-12-l {
+              line-height: 36px !important
+            }
+      
+            .wrapper .size-13,
+            .wrapper .size-13-m,
+            .wrapper .size-13-l {
+              font-size: 13px !important;
+              line-height: 21px !important
+            }
+      
+            .wrapper .size-13-m {
+              line-height: 26px !important
+            }
+      
+            .wrapper .size-13-l {
+              line-height: 39px !important
+            }
+      
+            .wrapper .size-14,
+            .wrapper .size-14-m,
+            .wrapper .size-14-l {
+              font-size: 14px !important;
+              line-height: 21px !important
+            }
+      
+            .wrapper .size-14-m {
+              line-height: 28px !important
+            }
+      
+            .wrapper .size-14-l {
+              line-height: 42px !important
+            }
+      
+            .wrapper .size-15,
+            .wrapper .size-15-m,
+            .wrapper .size-15-l {
+              font-size: 15px !important;
+              line-height: 23px !important
+            }
+      
+            .wrapper .size-15-m {
+              line-height: 30px !important
+            }
+      
+            .wrapper .size-15-l {
+              line-height: 45px !important
+            }
+      
+            .wrapper .size-16,
+            .wrapper .size-16-m,
+            .wrapper .size-16-l {
+              font-size: 16px !important;
+              line-height: 24px !important
+            }
+      
+            .wrapper .size-16-m {
+              line-height: 32px !important
+            }
+      
+            .wrapper .size-16-l {
+              line-height: 48px !important
+            }
+      
+            .wrapper .size-17,
+            .wrapper .size-17-m,
+            .wrapper .size-17-l {
+              font-size: 17px !important;
+              line-height: 26px !important
+            }
+      
+            .wrapper .size-17-m {
+              line-height: 34px !important
+            }
+      
+            .wrapper .size-17-l {
+              line-height: 51px !important
+            }
+      
+            .wrapper .size-18,
+            .wrapper .size-18-m,
+            .wrapper .size-18-l {
+              font-size: 18px !important;
+              line-height: 26px !important
+            }
+      
+            .wrapper .size-18-m {
+              line-height: 36px !important
+            }
+      
+            .wrapper .size-18-l {
+              line-height: 54px !important
+            }
+      
+            .wrapper .size-20,
+            .wrapper .size-20-m,
+            .wrapper .size-20-l {
+              font-size: 20px !important;
+              line-height: 28px !important
+            }
+      
+            .wrapper .size-20-m {
+              line-height: 40px !important
+            }
+      
+            .wrapper .size-20-l {
+              line-height: 60px !important
+            }
+      
+            .wrapper .size-22,
+            .wrapper .size-22-m,
+            .wrapper .size-22-l {
+              font-size: 22px !important;
+              line-height: 31px !important
+            }
+      
+            .wrapper .size-22-m {
+              line-height: 44px !important
+            }
+      
+            .wrapper .size-22-l {
+              line-height: 66px !important
+            }
+      
+            .wrapper .size-24,
+            .wrapper .size-24-m,
+            .wrapper .size-24-l {
+              font-size: 24px !important;
+              line-height: 32px !important
+            }
+      
+            .wrapper .size-24-m {
+              line-height: 48px !important
+            }
+      
+            .wrapper .size-24-l {
+              line-height: 72px !important
+            }
+      
+            .wrapper .size-26,
+            .wrapper .size-26-m,
+            .wrapper .size-26-l {
+              font-size: 26px !important;
+              line-height: 34px !important
+            }
+      
+            .wrapper .size-26-m {
+              line-height: 52px !important
+            }
+      
+            .wrapper .size-26-l {
+              line-height: 78px !important
+            }
+      
+            .wrapper .size-28,
+            .wrapper .size-28-m,
+            .wrapper .size-28-l {
+              font-size: 28px !important;
+              line-height: 36px !important
+            }
+      
+            .wrapper .size-28-m {
+              line-height: 56px !important
+            }
+      
+            .wrapper .size-28-l {
+              line-height: 84px !important
+            }
+      
+            .wrapper .size-30,
+            .wrapper .size-30-m,
+            .wrapper .size-30-l {
+              font-size: 30px !important;
+              line-height: 38px !important
+            }
+      
+            .wrapper .size-30-m {
+              line-height: 60px !important
+            }
+      
+            .wrapper .size-30-l {
+              line-height: 90px !important
+            }
+      
+            .wrapper .size-32,
+            .wrapper .size-32-m,
+            .wrapper .size-32-l {
+              font-size: 32px !important;
+              line-height: 40px !important
+            }
+      
+            .wrapper .size-32-m {
+              line-height: 64px !important
+            }
+      
+            .wrapper .size-32-l {
+              line-height: 96px !important
+            }
+      
+            .wrapper .size-34,
+            .wrapper .size-34-m,
+            .wrapper .size-34-l {
+              font-size: 34px !important;
+              line-height: 43px !important
+            }
+      
+            .wrapper .size-34-m {
+              line-height: 68px !important
+            }
+      
+            .wrapper .size-34-l {
+              line-height: 102px !important
+            }
+      
+            .wrapper .size-36,
+            .wrapper .size-36-m,
+            .wrapper .size-36-l {
+              font-size: 36px !important;
+              line-height: 43px !important
+            }
+      
+            .wrapper .size-36-m {
+              line-height: 72px !important
+            }
+      
+            .wrapper .size-36-l {
+              line-height: 108px !important
+            }
+      
+            .wrapper .size-40,
+            .wrapper .size-40-m,
+            .wrapper .size-40-l {
+              font-size: 40px !important;
+              line-height: 47px !important
+            }
+      
+            .wrapper .size-40-m {
+              line-height: 80px !important
+            }
+      
+            .wrapper .size-40-l {
+              line-height: 120px !important
+            }
+      
+            .wrapper .size-44,
+            .wrapper .size-44-m,
+            .wrapper .size-44-l {
+              font-size: 44px !important;
+              line-height: 50px !important
+            }
+      
+            .wrapper .size-44-m {
+              line-height: 88px !important
+            }
+      
+            .wrapper .size-44-l {
+              line-height: 132px !important
+            }
+      
+            .wrapper .size-48,
+            .wrapper .size-48-m,
+            .wrapper .size-48-l {
+              font-size: 48px !important;
+              line-height: 54px !important
+            }
+      
+            .wrapper .size-48-m {
+              line-height: 96px !important
+            }
+      
+            .wrapper .size-48-l {
+              line-height: 144px !important
+            }
+      
+            .wrapper .size-56,
+            .wrapper .size-56-m,
+            .wrapper .size-56-l {
+              font-size: 56px !important;
+              line-height: 60px !important
+            }
+      
+            .wrapper .size-56-m {
+              line-height: 112px !important
+            }
+      
+            .wrapper .size-56-l {
+              line-height: 168px !important
+            }
+      
+            .wrapper .size-64,
+            .wrapper .size-64-m,
+            .wrapper .size-64-l {
+              font-size: 64px !important;
+              line-height: 68px !important
+            }
+      
+            .wrapper .size-64-m {
+              line-height: 128px !important
+            }
+      
+            .wrapper .size-64-l {
+              line-height: 192px !important
+            }
+      
+            .wrapper .size-72,
+            .wrapper .size-72-m,
+            .wrapper .size-72-l {
+              font-size: 72px !important;
+              line-height: 76px !important
+            }
+      
+            .wrapper .size-72-m {
+              line-height: 144px !important
+            }
+      
+            .wrapper .size-72-l {
+              line-height: 216px !important
+            }
+      
+            .wrapper .size-80,
+            .wrapper .size-80-m,
+            .wrapper .size-80-l {
+              font-size: 80px !important;
+              line-height: 84px !important
+            }
+      
+            .wrapper .size-80-m {
+              line-height: 160px !important
+            }
+      
+            .wrapper .size-80-l {
+              line-height: 240px !important
+            }
+      
+            .wrapper .size-96,
+            .wrapper .size-96-m,
+            .wrapper .size-96-l {
+              font-size: 96px !important;
+              line-height: 100px !important
+            }
+      
+            .wrapper .size-96-m {
+              line-height: 192px !important
+            }
+      
+            .wrapper .size-96-l {
+              line-height: 288px !important
+            }
+      
+            .wrapper .size-112,
+            .wrapper .size-112-m,
+            .wrapper .size-112-l {
+              font-size: 112px !important;
+              line-height: 116px !important
+            }
+      
+            .wrapper .size-112-m {
+              line-height: 224px !important
+            }
+      
+            .wrapper .size-112-l {
+              line-height: 336px !important
+            }
+      
+            .wrapper .size-128,
+            .wrapper .size-128-m,
+            .wrapper .size-128-l {
+              font-size: 128px !important;
+              line-height: 132px !important
+            }
+      
+            .wrapper .size-128-m {
+              line-height: 256px !important
+            }
+      
+            .wrapper .size-128-l {
+              line-height: 384px !important
+            }
+      
+            .wrapper .size-144,
+            .wrapper .size-144-m,
+            .wrapper .size-144-l {
+              font-size: 144px !important;
+              line-height: 148px !important
+            }
+      
+            .wrapper .size-144-m {
+              line-height: 288px !important
+            }
+      
+            .wrapper .size-144-l {
+              line-height: 432px !important
+            }
+          }
         </style>
-         </head>
-         <body style="width:100%;font-family:Montserrat, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
-          <div dir="ltr" class="es-wrapper-color" lang="en" style="background-color:#374769"><!--[if gte mso 9]>
-                    <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-                        <v:fill type="tile" src="https://tlr.stripocdn.email/content/guids/CABINET_d9e64e61bd5ab14658ef0c95d79249160dd08cb38b25b963906cfe6c64bad7ae/images/bgtemplate.png" color="#374769" origin="0.5, 0" position="0.5, 0"></v:fill>
-                    </v:background>
-                <![endif]-->
-           <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0" background="https://ebwycju.stripocdn.email/content/guids/CABINET_d9e64e61bd5ab14658ef0c95d79249160dd08cb38b25b963906cfe6c64bad7ae/images/bgtemplate.png" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center top;background-image:url(https://ebwycju.stripocdn.email/content/guids/CABINET_d9e64e61bd5ab14658ef0c95d79249160dd08cb38b25b963906cfe6c64bad7ae/images/bgtemplate.png);background-color:#374769">
-             <tr>
-              <td class="es-m-margin" valign="top" style="padding:0;Margin:0">
-               <table class="es-content" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%">
-                 <tr>
-                  <td align="center" style="padding:0;Margin:0">
-                   <table class="es-content-body" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:600px">
-                     <tr>
-                      <td align="left" style="padding:0;Margin:0">
-                       <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                         <tr>
-                          <td align="center" valign="top" style="padding:0;Margin:0;width:600px">
-                           <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                             <tr>
-                              <td align="center" height="112" style="padding:0;Margin:0"></td>
-                             </tr>
-                             <tr>
-                              <td align="center" style="padding:0;Margin:0;font-size:0px"><img class="adapt-img" src="https://ebwycju.stripocdn.email/content/guids/CABINET_d9e64e61bd5ab14658ef0c95d79249160dd08cb38b25b963906cfe6c64bad7ae/images/2342343242x.png" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic" width="600"></td>
-                             </tr>
-                           </table></td>
-                         </tr>
-                       </table></td>
-                     </tr>
-                     <tr>
-                      <td align="left" style="Margin:0;padding-top:20px;padding-left:20px;padding-right:20px;padding-bottom:40px;background-color:#fbf3ea" bgcolor="#fbf3ea">
-                       <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                         <tr>
-                          <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
-                           <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                             <tr>
-                              <td align="center" class="es-m-txt-c" style="padding:0;Margin:0"><h1 style="Margin:0;line-height:55px;mso-line-height-rule:exactly;font-family:Changa, sans-serif;font-size:55px;font-style:normal;font-weight:bold;color:#E33650">Christmas&nbsp;</h1></td>
-                             </tr>
-                             <tr>
-                              <td align="center" class="es-m-txt-c" style="padding:0;Margin:0"><h2 style="Margin:0;line-height:39px;mso-line-height-rule:exactly;font-family:Changa, sans-serif;font-size:35px;font-style:normal;font-weight:bold;color:#E33650">PARTY!!</h2></td>
-                             </tr>
-                             <tr>
-                              <td align="center" style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px;font-size:0px"><img src="https://ebwycju.stripocdn.email/content/guids/CABINET_d9e64e61bd5ab14658ef0c95d79249160dd08cb38b25b963906cfe6c64bad7ae/images/star.png" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic" width="54"></td>
-                             </tr>
-                             <tr>
-                              <td align="center" class="es-m-txt-c" style="padding:0;Margin:0"><h3 style="Margin:0;line-height:26px;mso-line-height-rule:exactly;font-family:Changa, sans-serif;font-size:22px;font-style:normal;font-weight:bold;color:#E33650">LIVE MUSIC BEER AND LOTS OF MAGIC</h3></td>
-                             </tr>
-                             <tr>
-                              <td align="center" style="padding:0;Margin:0;padding-top:20px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Montserrat, sans-serif;line-height:23px;color:#374769;font-size:15px">We know how to throw a great party! Delicious festive food, plenty of Christmas spirit and loads of fun are on the menu for a splendid night. Bring your friends and colleagues along for a fabulous time at the top <strong>Christmas party!</strong></p></td>
-                             </tr>
-                             <tr>
-                              <td align="center" style="padding:0;Margin:0;padding-top:30px"><!--[if mso]><a href="https://viewstripo.email/" target="_blank" hidden>
-            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://viewstripo.email/" 
-                        style="height:44px; v-text-anchor:middle; width:183px" arcsize="50%" stroke="f"  fillcolor="#e7a31f">
-                <w:anchorlock></w:anchorlock>
-                <center style='color:#ffffff; font-family:arial, "helvetica neue", helvetica, sans-serif; font-size:14px; font-weight:700; line-height:14px;  mso-text-raise:1px'>LEARN MORE</center>
-            </v:roundrect></a>
-        <![endif]--><!--[if !mso]><!-- --><span class="msohide es-button-border" style="border-style:solid;border-color:#ff564e;background:#008c7c;border-width:0px;display:inline-block;border-radius:30px;width:auto;mso-hide:all"><a href="https://viewstripo.email/" class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:14px;padding:14px 35px 14px 35px;display:inline-block;background:#E7A31F;border-radius:30px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:bold;font-style:normal;line-height:17px;width:auto;text-align:center;mso-padding-alt:0;mso-border-alt:10px solid #E7A31F">LEARN MORE</a></span><!--<![endif]--></td>
-                             </tr>
-                           </table></td>
-                         </tr>
-                       </table></td>
-                     </tr>
-                   </table></td>
-                 </tr>
-               </table>
-               <table class="es-footer" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%;background-color:transparent;background-repeat:repeat;background-position:center top">
-                 <tr>
-                  <td align="center" style="padding:0;Margin:0">
-                   <table class="es-footer-body" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#E33650;width:600px">
-                     <tr>
-                      <td align="left" style="Margin:0;padding-left:20px;padding-right:20px;padding-top:30px;padding-bottom:30px">
-                       <table cellspacing="0" cellpadding="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                         <tr>
-                          <td align="left" style="padding:0;Margin:0;width:560px">
-                           <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                             <tr>
-                              <td align="center" style="padding:0;Margin:0;padding-top:15px;padding-bottom:15px;font-size:0">
-                               <table cellpadding="0" cellspacing="0" class="es-table-not-adapt es-social" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                 <tr>
-                                  <td align="center" valign="top" style="padding:0;Margin:0;padding-right:10px"><a target="_blank" href="https://www.facebook.com/stripoeditor/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFFFFF;font-size:12px"><img src="https://ebwycju.stripocdn.email/content/assets/img/social-icons/logo-white/facebook-logo-white.png" alt="Fb" title="Facebook" width="32" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
-                                  <td align="center" valign="top" style="padding:0;Margin:0;padding-right:10px"><a target="_blank" href="https://twitter.com/Stripo_email" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFFFFF;font-size:12px"><img src="https://ebwycju.stripocdn.email/content/assets/img/social-icons/logo-white/x-logo-white.png" alt="X" title="X.com" width="32" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
-                                  <td align="center" valign="top" style="padding:0;Margin:0;padding-right:10px"><a target="_blank" href="https://www.instagram.com/stripo.email/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFFFFF;font-size:12px"><img src="https://ebwycju.stripocdn.email/content/assets/img/social-icons/logo-white/instagram-logo-white.png" alt="Ig" title="Instagram" width="32" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
-                                  <td align="center" valign="top" style="padding:0;Margin:0;padding-right:10px"><a target="_blank" href="https://www.youtube.com/channel/UCnPMarkPEGzk-3fTM9Jxgcw" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFFFFF;font-size:12px"><img src="https://ebwycju.stripocdn.email/content/assets/img/social-icons/logo-white/youtube-logo-white.png" alt="Yt" title="Youtube" width="32" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
-                                  <td align="center" valign="top" style="padding:0;Margin:0"><a target="_blank" href="https://www.pinterest.com/StripoEmail/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFFFFF;font-size:12px"><img src="https://ebwycju.stripocdn.email/content/assets/img/social-icons/logo-white/pinterest-logo-white.png" alt="P" title="Pinterest" width="32" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td>
-                                 </tr>
-                               </table></td>
-                             </tr>
-                             <tr>
-                              <td align="center" style="padding:0;Margin:0;padding-top:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Montserrat, sans-serif;line-height:18px;color:#FFFFFF;font-size:12px">If you think this message was sent to you in error, you can <a target="_blank" href="" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFFFFF;font-size:12px">unsubscribe</a>.</p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Montserrat, sans-serif;line-height:18px;color:#FFFFFF;font-size:12px">Please refer to our <a target="_blank" href="" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFFFFF;font-size:12px">privacy policy</a> for more information.</p></td>
-                             </tr>
-                           </table></td>
-                         </tr>
-                       </table></td>
-                     </tr>
-                   </table></td>
-                 </tr>
-               </table>
-               <table cellpadding="0" cellspacing="0" class="es-content" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%">
-                 <tr>
-                  <td align="center" style="padding:0;Margin:0">
-                   <table class="es-content-body" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:600px" cellspacing="0" cellpadding="0" bgcolor="#c9dcff" align="center">
-                     <tr>
-                      <td style="Margin:0;padding-left:20px;padding-right:20px;padding-top:30px;padding-bottom:30px;background-position:left top" align="left">
-                       <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                         <tr>
-                          <td valign="top" align="center" style="padding:0;Margin:0;width:560px">
-                           <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                             <tr>
-                              <td class="es-infoblock made_with" align="center" style="padding:0;Margin:0;line-height:14px;font-size:0;color:#CCCCCC"><a target="_blank" href="https://viewstripo.email/?utm_source=templates&utm_medium=email&utm_campaign=christmas_4_2024&utm_content=miracles_at_christmas" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#CCCCCC;font-size:12px"><img src="https://ebwycju.stripocdn.email/content/guids/cab_pub_7cbbc409ec990f19c78c75bd1e06f215/images/78411525331495932.png" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic" width="125"></a></td>
-                             </tr>
-                           </table></td>
-                         </tr>
-                       </table></td>
-                     </tr>
-                   </table></td>
-                 </tr>
-               </table></td>
-             </tr>
-           </table>
-          </div>
-         </body>
-        </html>`,
+        <meta name="x-apple-disable-message-reformatting" />
+        <style type="text/css">
+          .main,
+          .mso {
+            margin: 0;
+            padding: 0;
+          }
+      
+          table {
+            border-collapse: collapse;
+            table-layout: fixed;
+          }
+      
+          * {
+            line-height: inherit;
+          }
+      
+          [x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+          }
+      
+          .wrapper .footer__share-button a:hover,
+          .wrapper .footer__share-button a:focus {
+            color: #ffffff !important;
+          }
+      
+          .wrapper .footer__share-button a.icon-white:hover,
+          .wrapper .footer__share-button a.icon-white:focus {
+            color: #ffffff !important;
+          }
+      
+          .wrapper .footer__share-button a.icon-black:hover,
+          .wrapper .footer__share-button a.icon-black:focus {
+            color: #000000 !important;
+          }
+      
+          .btn a:hover,
+          .btn a:focus,
+          .footer__share-button a:hover,
+          .footer__share-button a:focus,
+          .email-footer__links a:hover,
+          .email-footer__links a:focus {
+            opacity: 0.8;
+          }
+      
+          .preheader,
+          .header,
+          .layout,
+          .column {
+            transition: width 0.25s ease-in-out, max-width 0.25s ease-in-out;
+          }
+      
+          .preheader td {
+            padding-bottom: 8px;
+          }
+      
+          .layout,
+          div.header {
+            max-width: 400px !important;
+            -fallback-width: 95% !important;
+            width: calc(100% - 20px) !important;
+          }
+      
+          div.preheader {
+            max-width: 360px !important;
+            -fallback-width: 90% !important;
+            width: calc(100% - 60px) !important;
+          }
+      
+          .snippet,
+          .webversion {
+            Float: none !important;
+          }
+      
+          .stack .column {
+            max-width: 400px !important;
+            width: 100% !important;
+          }
+      
+          .fixed-width.has-border {
+            max-width: 402px !important;
+          }
+      
+          .fixed-width.has-border .layout__inner {
+            box-sizing: border-box;
+          }
+      
+          .snippet,
+          .webversion {
+            width: 50% !important;
+          }
+      
+          .mso .layout__edges {
+            font-size: 0;
+          }
+      
+          .layout-fixed-width,
+          .mso .layout-full-width {
+            background-color: #ffffff;
+          }
+      
+          @media only screen and (min-width: 620px) {
+      
+            .column,
+            .gutter {
+              display: table-cell;
+              Float: none !important;
+              vertical-align: top;
+            }
+      
+            div.preheader,
+            .email-footer {
+              max-width: 560px !important;
+              width: 560px !important;
+            }
+      
+            .snippet,
+            .webversion {
+              width: 280px !important;
+            }
+      
+            div.header,
+            .layout,
+            .one-col .column {
+              max-width: 600px !important;
+              width: 600px !important;
+            }
+      
+            .fixed-width.has-border,
+            .fixed-width.x_has-border,
+            .has-gutter.has-border,
+            .has-gutter.x_has-border {
+              max-width: 602px !important;
+              width: 602px !important;
+            }
+      
+            .two-col .column {
+              max-width: 300px !important;
+              width: 300px !important;
+            }
+      
+            .three-col .column,
+            .column.narrow,
+            .column.x_narrow {
+              max-width: 200px !important;
+              width: 200px !important;
+            }
+      
+            .column.wide,
+            .column.x_wide {
+              width: 400px !important;
+            }
+      
+            .two-col.has-gutter .column,
+            .two-col.x_has-gutter .column {
+              max-width: 290px !important;
+              width: 290px !important;
+            }
+      
+            .three-col.has-gutter .column,
+            .three-col.x_has-gutter .column,
+            .has-gutter .narrow {
+              max-width: 188px !important;
+              width: 188px !important;
+            }
+      
+            .has-gutter .wide {
+              max-width: 394px !important;
+              width: 394px !important;
+            }
+      
+            .two-col.has-gutter.has-border .column,
+            .two-col.x_has-gutter.x_has-border .column {
+              max-width: 292px !important;
+              width: 292px !important;
+            }
+      
+            .three-col.has-gutter.has-border .column,
+            .three-col.x_has-gutter.x_has-border .column,
+            .has-gutter.has-border .narrow,
+            .has-gutter.x_has-border .narrow {
+              max-width: 190px !important;
+              width: 190px !important;
+            }
+      
+            .has-gutter.has-border .wide,
+            .has-gutter.x_has-border .wide {
+              max-width: 396px !important;
+              width: 396px !important;
+            }
+          }
+      
+          @supports (display: flex) {
+            @media only screen and (min-width: 620px) {
+              .fixed-width.has-border .layout__inner {
+                display: flex !important;
+              }
+            }
+          }
+      
+          /***
+      * Mobile Styles
+      *
+      * 1. Overriding inline styles
+      */
+          @media(max-width: 619px) {
+      
+            .email-flexible-footer .left-aligned-footer .column,
+            .email-flexible-footer .center-aligned-footer,
+            .email-flexible-footer .right-aligned-footer .column {
+              max-width: 100% !important;
+              /* [1] */
+              text-align: center !important;
+              /* [1] */
+              width: 100% !important;
+              /* [1] */
+            }
+      
+            .flexible-footer-logo {
+              margin-left: 0px !important;
+              /* [1] */
+              margin-right: 0px !important;
+              /* [1] */
+            }
+      
+            .email-flexible-footer .left-aligned-footer .flexible-footer__share-button__container,
+            .email-flexible-footer .center-aligned-footer .flexible-footer__share-button__container,
+            .email-flexible-footer .right-aligned-footer .flexible-footer__share-button__container {
+              display: inline-block;
+              margin-left: 5px !important;
+              /* [1] */
+              margin-right: 5px !important;
+              /* [1] */
+            }
+      
+            .email-flexible-footer__additionalinfo--center {
+              text-align: center !important;
+              /* [1] */
+            }
+      
+            .email-flexible-footer .left-aligned-footer table,
+            .email-flexible-footer .center-aligned-footer table,
+            .email-flexible-footer .right-aligned-footer table {
+              display: table !important;
+              /* [1] */
+              width: 100% !important;
+              /* [1] */
+            }
+      
+            .email-flexible-footer .footer__share-button,
+            .email-flexible-footer .email-footer__additional-info {
+              margin-left: 20px;
+              margin-right: 20px;
+            }
+          }
+      
+          @media only screen and (-webkit-min-device-pixel-ratio: 2),
+          only screen and (min--moz-device-pixel-ratio: 2),
+          only screen and (-o-min-device-pixel-ratio: 2/1),
+          only screen and (min-device-pixel-ratio: 2),
+          only screen and (min-resolution: 192dpi),
+          only screen and (min-resolution: 2dppx) {
+            .fblike {
+              background-image: url(https://i7.createsend1.com/static/eb/master/13-the-blueprint-3/images/fblike@2x.png) !important;
+            }
+      
+            .tweet {
+              background-image: url(https://i8.createsend1.com/static/eb/master/13-the-blueprint-3/images/tweet@2x.png) !important;
+            }
+      
+            .linkedinshare {
+              background-image: url(https://i9.createsend1.com/static/eb/master/13-the-blueprint-3/images/lishare@2x.png) !important;
+            }
+      
+            .forwardtoafriend {
+              background-image: url(https://i10.createsend1.com/static/eb/master/13-the-blueprint-3/images/forward@2x.png) !important;
+            }
+          }
+      
+          @media (max-width: 321px) {
+            .fixed-width.has-border .layout__inner {
+              border-width: 1px 0 !important;
+            }
+      
+            .layout,
+            .stack .column {
+              min-width: 320px !important;
+              width: 320px !important;
+            }
+      
+            .border {
+              display: none;
+            }
+      
+            .has-gutter .border {
+              display: table-cell;
+            }
+          }
+      
+          .cmctbl--inline table {
+            border-collapse: collapse;
+          }
+        </style>
+      
+        <!--[if !mso]><!-->
+        <style type="text/css">
+          @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700,400italic,700italic);
+        </style>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,400italic,700italic" rel="stylesheet"
+          type="text/css" /><!--<![endif]-->
+        <style type="text/css">
+          .main,
+          .mso {
+            background-color: #fff
+          }
+      
+          .logo a:hover,
+          .logo a:focus {
+            color: #1e2e3b !important
+          }
+      
+          .footer-logo a:hover,
+          .footer-logo a:focus {
+            color: #372d1b !important
+          }
+      
+          .mso .layout-has-border {
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc
+          }
+      
+          .mso .layout-has-bottom-border {
+            border-bottom: 1px solid #ccc
+          }
+      
+          .mso .border {
+            background-color: #ccc
+          }
+      
+          .mso h1 {}
+      
+          .mso h1 {
+            font-size: 34px !important;
+            line-height: 43px !important
+          }
+      
+          .mso h2 {}
+      
+          .mso h2 {
+            font-size: 24px !important;
+            line-height: 32px !important
+          }
+      
+          .mso h3 {}
+      
+          .mso h3 {
+            font-size: 18px !important;
+            line-height: 26px !important
+          }
+      
+          .mso .layout__inner {}
+      
+          .mso .footer__share-button p {}
+      
+          .mso .footer__share-button p {
+            font-family: Montserrat, DejaVu Sans, Verdana, sans-serif
+          }
+        </style><!--[if mso]><style type="text/css" emb-not-inline>
+      .mso div{border:0 none white !important}.mso .w560 .divider{}.mso .w560 .divider{Margin-left:260px !important;Margin-right:260px !important}.mso .w360 .divider{}.mso .w360 .divider{Margin-left:160px !important;Margin-right:160px !important}.mso .w260 .divider{}.mso .w260 .divider{Margin-left:110px !important;Margin-right:110px !important}.mso .w160 .divider{}.mso .w160 .divider{Margin-left:60px !important;Margin-right:60px !important}.mso .w60 .divider{}.mso .w60 .divider{Margin-left:10px !important;Margin-right:10px !important}.mso .w354 .divider{}.mso .w354 .divider{Margin-left:157px !important;Margin-right:157px !important}.mso .w250 .divider{}.mso .w250 .divider{Margin-left:105px !important;Margin-right:105px !important}.mso .w148 .divider{}.mso .w148 .divider{Margin-left:54px !important;Margin-right:54px !important}.mso .size-8,.mso .size-8-m,.mso .size-8-l{font-size:8px 
+      !important;line-height:14px !important}.mso .size-8-m{line-height:16px !important}.mso .size-8-l{line-height:24px !important}.mso .size-9,.mso .size-9-m,.mso .size-9-l{font-size:9px !important;line-height:16px !important}.mso .size-9-m{line-height:18px !important}.mso .size-9-l{line-height:27px !important}.mso .size-10,.mso .size-10-m,.mso .size-10-l{font-size:10px !important;line-height:18px !important}.mso .size-10-m{line-height:20px !important}.mso .size-10-l{line-height:30px !important}.mso .size-11,.mso .size-11-m,.mso .size-11-l{font-size:11px !important;line-height:19px !important}.mso .size-11-m{line-height:22px !important}.mso .size-11-l{line-height:33px !important}.mso .size-12,.mso .size-12-m,.mso .size-12-l{font-size:12px !important;line-height:19px !important}.mso .size-12-m{line-height:24px !important}.mso .size-12-l{line-height:36px !important}.mso .size-13,.mso 
+      .size-13-m,.mso .size-13-l{font-size:13px !important;line-height:21px !important}.mso .size-13-m{line-height:26px !important}.mso .size-13-l{line-height:39px !important}.mso .size-14,.mso .size-14-m,.mso .size-14-l{font-size:14px !important;line-height:21px !important}.mso .size-14-m{line-height:28px !important}.mso .size-14-l{line-height:42px !important}.mso .size-15,.mso .size-15-m,.mso .size-15-l{font-size:15px !important;line-height:23px !important}.mso .size-15-m{line-height:30px !important}.mso .size-15-l{line-height:45px !important}.mso .size-16,.mso .size-16-m,.mso .size-16-l{font-size:16px !important;line-height:24px !important}.mso .size-16-m{line-height:32px !important}.mso .size-16-l{line-height:48px !important}.mso .size-17,.mso .size-17-m,.mso .size-17-l{font-size:17px !important;line-height:26px !important}.mso .size-17-m{line-height:34px !important}.mso 
+      .size-17-l{line-height:51px !important}.mso .size-18,.mso .size-18-m,.mso .size-18-l{font-size:18px !important;line-height:26px !important}.mso .size-18-m{line-height:36px !important}.mso .size-18-l{line-height:54px !important}.mso .size-20,.mso .size-20-m,.mso .size-20-l{font-size:20px !important;line-height:28px !important}.mso .size-20-m{line-height:40px !important}.mso .size-20-l{line-height:60px !important}.mso .size-22,.mso .size-22-m,.mso .size-22-l{font-size:22px !important;line-height:31px !important}.mso .size-22-m{line-height:44px !important}.mso .size-22-l{line-height:66px !important}.mso .size-24,.mso .size-24-m,.mso .size-24-l{font-size:24px !important;line-height:32px !important}.mso .size-24-m{line-height:48px !important}.mso .size-24-l{line-height:72px !important}.mso .size-26,.mso .size-26-m,.mso .size-26-l{font-size:26px !important;line-height:34px !important}.mso 
+      .size-26-m{line-height:52px !important}.mso .size-26-l{line-height:78px !important}.mso .size-28,.mso .size-28-m,.mso .size-28-l{font-size:28px !important;line-height:36px !important}.mso .size-28-m{line-height:56px !important}.mso .size-28-l{line-height:84px !important}.mso .size-30,.mso .size-30-m,.mso .size-30-l{font-size:30px !important;line-height:38px !important}.mso .size-30-m{line-height:60px !important}.mso .size-30-l{line-height:90px !important}.mso .size-32,.mso .size-32-m,.mso .size-32-l{font-size:32px !important;line-height:40px !important}.mso .size-32-m{line-height:64px !important}.mso .size-32-l{line-height:96px !important}.mso .size-34,.mso .size-34-m,.mso .size-34-l{font-size:34px !important;line-height:43px !important}.mso .size-34-m{line-height:68px !important}.mso .size-34-l{line-height:102px !important}.mso .size-36,.mso .size-36-m,.mso .size-36-l{font-size:36px 
+      !important;line-height:43px !important}.mso .size-36-m{line-height:72px !important}.mso .size-36-l{line-height:108px !important}.mso .size-40,.mso .size-40-m,.mso .size-40-l{font-size:40px !important;line-height:47px !important}.mso .size-40-m{line-height:80px !important}.mso .size-40-l{line-height:120px !important}.mso .size-44,.mso .size-44-m,.mso .size-44-l{font-size:44px !important;line-height:50px !important}.mso .size-44-m{line-height:88px !important}.mso .size-44-l{line-height:132px !important}.mso .size-48,.mso .size-48-m,.mso .size-48-l{font-size:48px !important;line-height:54px !important}.mso .size-48-m{line-height:96px !important}.mso .size-48-l{line-height:144px !important}.mso .size-56,.mso .size-56-m,.mso .size-56-l{font-size:56px !important;line-height:60px !important}.mso .size-56-m{line-height:112px !important}.mso .size-56-l{line-height:168px !important}.mso 
+      .size-64,.mso .size-64-m,.mso .size-64-l{font-size:64px !important;line-height:68px !important}.mso .size-64-m{line-height:128px !important}.mso .size-64-l{line-height:192px !important}.mso .size-72,.mso .size-72-m,.mso .size-72-l{font-size:72px !important;line-height:76px !important}.mso .size-72-m{line-height:144px !important}.mso .size-72-l{line-height:216px !important}.mso .size-80,.mso .size-80-m,.mso .size-80-l{font-size:80px !important;line-height:84px !important}.mso .size-80-m{line-height:160px !important}.mso .size-80-l{line-height:240px !important}.mso .size-96,.mso .size-96-m,.mso .size-96-l{font-size:96px !important;line-height:100px !important}.mso .size-96-m{line-height:192px !important}.mso .size-96-l{line-height:288px !important}.mso .size-112,.mso .size-112-m,.mso .size-112-l{font-size:112px !important;line-height:116px !important}.mso .size-112-m{line-height:224px 
+      !important}.mso .size-112-l{line-height:336px !important}.mso .size-128,.mso .size-128-m,.mso .size-128-l{font-size:128px !important;line-height:132px !important}.mso .size-128-m{line-height:256px !important}.mso .size-128-l{line-height:384px !important}.mso .size-144,.mso .size-144-m,.mso .size-144-l{font-size:144px !important;line-height:148px !important}.mso .size-144-m{line-height:288px !important}.mso .size-144-l{line-height:432px !important}.mso .cmctbl table td,.mso .cmctbl table th{Margin-left:20px !important;Margin-right:20px !important}.mso .cmctbl- -inline,.mso .cmctbl{padding-left:20px !important;padding-right:20px !important}.mso .cmctbl- -inline table,.mso .cmctbl 
+      table{mso-table-lspace:0pt;mso-table-rspace:0pt;
+      mso-line-height-rule:exactly}.size-8,.size-9{mso-text-raise:9px}.size-34,h1{mso-text-raise:13px}.size-36{mso-text-raise:14px}.size-40{mso-text-raise:16px}.size-44{mso-text-raise:17px}.size-48{mso-text-raise:18px}.size-56{mso-text-raise:22px}.size-64{mso-text-raise:25px}.size-72{mso-text-raise:28px}.size-80{mso-text-raise:32px}.size-96{mso-text-raise:40px}.size-112{mso-text-raise:46px}.size-128{mso-text-raise:54px}.size-144{mso-text-raise:58px}.size-11-m,.size-12-m{mso-text-raise:6px}.size-13-m,.size-14-m{mso-text-raise:7px}.size-15-m,.size-16-m,.size-8-l{mso-text-raise:8px}.size-17-m,.size-18-m{mso-text-raise:9px}.size-20-m,.size-10-l{mso-text-raise:10px}.size-22-m,.size-11-l{mso-text-raise:11px}.size-24-m,.size-12-l{mso-text-raise:12px}.size-26-m,.size-13-l{mso-text-raise:13px}.size-28-m,.size-14-l{mso-text-raise:14px}.size-30-m,.size-15-l{mso-text-raise:15px}.size-32-m,.size-16
+      -l{mso-text-raise:16px}.size-34-m,.size-17-l{mso-text-raise:17px}.size-36-m,.size-18-l{mso-text-raise:18px}.size-40-m,.size-20-l{mso-text-raise:20px}.size-44-m,.size-22-l{mso-text-raise:22px}.size-48-m,.size-24-l{mso-text-raise:24px}.size-26-l{mso-text-raise:26px}.size-56-m,.size-28-l{mso-text-raise:28px}.size-30-l{mso-text-raise:30px}.size-64-m,.size-32-l{mso-text-raise:32px}.size-34-l{mso-text-raise:34px}.size-72-m,.size-36-l{mso-text-raise:36px}.size-80-m,.size-40-l{mso-text-raise:40px}.size-44-l{mso-text-raise:44px}.size-96-m,.size-48-l{mso-text-raise:48px}.size-112-m,.size-56-l{mso-text-raise:56px}.size-128-m,.size-64-l{mso-text-raise:64px}.size-144-m,.size-72-l{mso-text-raise:72px}.size-80-l{mso-text-raise:80px}.size-96-l{mso-text-raise:96px}.size-112-l{mso-text-raise:112px}.size-128-l{mso-text-raise:128px}.size-144-l{mso-text-raise:144px}
+      </style><![endif]-->
+        <meta name="robots" content="noindex,nofollow" />
+        <meta property="og:title" content="My First Campaign" />
+      </head>
+      <!--[if mso]>
+        <body class="mso">
+      <![endif]-->
+      </div>
+      <!--[if !mso]><!-->
+      
+      <body class="main full-padding" style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;">
+        <!--<![endif]-->
+        <table class="wrapper"
+          style="border-collapse: collapse;table-layout: fixed;min-width: 320px;width: 100%;background-color: #fff;"
+          cellpadding="0" cellspacing="0" role="presentation">
+          <tbody>
+            <tr>
+              <td>
+                <div role="banner">
+                  <div class="preheader"
+                    style="Margin: 0 auto;max-width: 560px;min-width: 280px; width: 280px;width: calc(28000% - 167440px);">
+                    <div style="border-collapse: collapse;display: table;width: 100%;">
+                      <!--[if mso]><table align="center" class="preheader" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="width: 280px" valign="top"><![endif]-->
+                      <div class="snippet"
+                        style="display: table-cell;Float: left;font-size: 12px;line-height: 19px;max-width: 280px;min-width: 140px; width: 140px;width: calc(14000% - 78120px);padding: 10px 0 5px 0;color: #717a8a;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;">
+      
+                      </div>
+                      <!--[if mso]></td><td style="width: 280px" valign="top"><![endif]-->
+                      <div class="webversion"
+                        style="display: table-cell;Float: left;font-size: 12px;line-height: 19px;max-width: 280px;min-width: 139px; width: 139px;width: calc(14100% - 78680px);padding: 10px 0 5px 0;text-align: right;color: #717a8a;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;">
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                </div>
+                <div>
+                  <div class="layout one-col fixed-width stack"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+                    <div class="layout__inner"
+                      style="border-collapse: collapse;display: table;width: 100%;background-color: #000000;">
+                      <!--[if mso]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-fixed-width" style="background-color: #000000;"><td style="width: 600px" class="w560"><![endif]-->
+                      <div class="column"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;">
+                          <div style="mso-line-height-rule: exactly;line-height: 29px;font-size: 1px;">&nbsp;</div>
+                        </div>
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <h1
+                              style="Margin-top: 0;Margin-bottom: 20px;font-style: normal;font-weight: normal;color: #f5f6f8;font-size: 30px;line-height: 38px;text-align: center;">
+                              Invitation to Next Court Hearing<br/>
+                              For Year 2024</h1>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                  <div class="layout one-col fixed-width stack"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+                    <div class="layout__inner"
+                      style="border-collapse: collapse;display: table;width: 100%;background-color: #ffffff;">
+                      <!--[if mso]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-fixed-width" style="background-color: #ffffff;"><td style="width: 600px" class="w560"><![endif]-->
+                      <div class="column"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <h3
+                              style="Margin-top: 0;Margin-bottom: 12px;font-style: normal;font-weight: normal;color: #3d3b3d;font-size: 17px;line-height: 26px;">
+                              Save the Date for our next court hearing on <strong><u>${selectedCase.next_date.toISOString().slice(0, 10)}</u></strong> We invite you to join us for this important session, featuring Advocate <strong><u>HIMANSHU BAGARHATTA</u></strong> and our committed legal team</h3>
+                          </div >
+                        </div>
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <p style="Margin-top: 0;Margin-bottom: 0;">- Hear from our guest speakers<br />
+                              - Understand market trends and insights<br />
+                              - Meet the team who makes it happen</p>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                  <div class="layout fixed-width stack"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+                    <div class="layout__inner"
+                      style="border-collapse: collapse;display: table;width: 100%;background-color: #f5f6f8;">
+                      <!--[if mso]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-fixed-width" style="background-color: #f5f6f8;"><td style="width: 200px" valign="top" class="w160"><![endif]-->
+                      <div class="column narrow"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(72200px - 12000%);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <h3
+                              style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #3d3b3d;font-size: 17px;line-height: 26px;text-align: center;">
+                              <span style="text-decoration: inherit;color: #525252;"><strong>Previous Date</strong></span></h3>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td><td style="width: 400px" valign="top" class="w360"><![endif]-->
+                      <div class="column wide"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <p style="Margin-top: 0;Margin-bottom: 0;">${selectedCase.previous_date.toISOString().slice(0, 10)}</p>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                  <div class="layout fixed-width stack"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+                    <div class="layout__inner"
+                      style="border-collapse: collapse;display: table;width: 100%;background-color: #ffffff;">
+                      <!--[if mso]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-fixed-width" style="background-color: #ffffff;"><td style="width: 200px" valign="top" class="w160"><![endif]-->
+                      <div class="column narrow"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(72200px - 12000%);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <h3
+                              style='Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #3d3b3d;font-size: 17px;line-height: 26px;font-family: Montserrat,"DejaVu Sans",Verdana,sans-serif;text-align: center;'>
+                              <span class="font-montserrat" style="text-decoration: inherit;"><span
+                                  style="text-decoration: inherit;color: #525252;"><strong>Next Date</strong></span></span></h3>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td><td style="width: 400px" valign="top" class="w360"><![endif]-->
+                      <div class="column wide"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <p
+                              style='Margin-top: 0;Margin-bottom: 0;font-family: Montserrat,"DejaVu Sans",Verdana,sans-serif;'>
+                              <span class="font-montserrat" style="text-decoration: inherit;">${selectedCase.next_date.toISOString().slice(0, 10)}&nbsp;</span></p>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                  <div class="layout fixed-width stack"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+                    <div class="layout__inner"
+                      style="border-collapse: collapse;display: table;width: 100%;background-color: #f5f6f8;">
+                      <!--[if mso]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-fixed-width" style="background-color: #f5f6f8;"><td style="width: 200px" valign="top" class="w160"><![endif]-->
+                      <div class="column narrow"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(72200px - 12000%);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <h3
+                              style='Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #3d3b3d;font-size: 17px;line-height: 26px;font-family: Montserrat,"DejaVu Sans",Verdana,sans-serif;text-align: center;'>
+                              <span class="font-montserrat" style="text-decoration: inherit;"><span
+                                  style="text-decoration: inherit;color: #525252;"><strong>Advocate Name</strong></span></span></h3>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td><td style="width: 400px" valign="top" class="w360"><![endif]-->
+                      <div class="column wide"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <p style="Margin-top: 0;Margin-bottom: 0;"><strong>HIMANSHU BAGARHATTA</strong></p>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                  <div class="layout fixed-width stack"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+                    <div class="layout__inner"
+                      style="border-collapse: collapse;display: table;width: 100%;background-color: #ffffff;">
+                      <!--[if mso]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-fixed-width" style="background-color: #ffffff;"><td style="width: 200px" valign="top" class="w160"><![endif]-->
+                      <div class="column narrow"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(72200px - 12000%);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <h3
+                              style='Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #3d3b3d;font-size: 17px;line-height: 26px;font-family: Montserrat,"DejaVu Sans",Verdana,sans-serif;text-align: center;'>
+                              <span class="font-montserrat" style="text-decoration: inherit;"><span
+                                  style="text-decoration: inherit;color: #525252;"><strong>Case Type</strong></span></span></h3>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td><td style="width: 400px" valign="top" class="w360"><![endif]-->
+                      <div class="column wide"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <p
+                              style='Margin-top: 0;Margin-bottom: 0;font-family: Montserrat,"DejaVu Sans",Verdana,sans-serif;'>
+                              <span class="font-montserrat" style="text-decoration: inherit;">${selectedCase.case_type}</span></p>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                  <div class="layout fixed-width stack"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+                    <div class="layout__inner"
+                      style="border-collapse: collapse;display: table;width: 100%;background-color: #f5f6f8;">
+                      <!--[if mso]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-fixed-width" style="background-color: #f5f6f8;"><td style="width: 200px" valign="top" class="w160"><![endif]-->
+                      <div class="column narrow"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(72200px - 12000%);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <h3
+                              style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #3d3b3d;font-size: 17px;line-height: 26px;text-align: center;">
+                              <span style="text-decoration: inherit;color: #525252;"><strong>Name Of The Court</strong></span></h3>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td><td style="width: 400px" valign="top" class="w360"><![endif]-->
+                      <div class="column wide"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <p style="Margin-top: 0;Margin-bottom: 0;">${selectedCase.court_name}</p>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                  <div class="layout fixed-width stack"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+                    <div class="layout__inner"
+                      style="border-collapse: collapse;display: table;width: 100%;background-color: #ffffff;">
+                      <!--[if mso]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-fixed-width" style="background-color: #ffffff;"><td style="width: 200px" valign="top" class="w160"><![endif]-->
+                      <div class="column narrow"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(72200px - 12000%);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <h3
+                              style='Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #3d3b3d;font-size: 17px;line-height: 26px;font-family: Montserrat,"DejaVu Sans",Verdana,sans-serif;text-align: center;'>
+                              <span class="font-montserrat" style="text-decoration: inherit;"><span
+                                  style="text-decoration: inherit;color: #525252;"><strong>Case Stage</strong></span></span></h3>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td><td style="width: 400px" valign="top" class="w360"><![endif]-->
+                      <div class="column wide"
+                        style="text-align: left;color: #525252;font-size: 16px;line-height: 24px;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
+      
+                        <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                          <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
+                            <p
+                              style='Margin-top: 0;Margin-bottom: 0;font-family: Montserrat,"DejaVu Sans",Verdana,sans-serif;'>
+                              <span class="font-montserrat" style="text-decoration: inherit;">${selectedCase.case_stage}</span></p>
+                          </div>
+                        </div>
+      
+                      </div>
+                      <!--[if mso]></td></tr></table><![endif]-->
+                    </div>
+                  </div>
+      
+                  <div style="mso-line-height-rule: exactly;line-height: 20px;font-size: 20px;">&nbsp;</div>
+      
+                  <div style="mso-line-height-rule: exactly;line-height: 20px;font-size: 20px;">&nbsp;</div>
+      
+                </div>
+                <div role="contentinfo">
+                  <div style="line-height:4px;font-size:4px;" id="footer-top-spacing">&nbsp;</div>
+                  <div class="layout email-flexible-footer email-footer"
+                    style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;"
+                    id="footer-content">
+                    <div class="layout__inner center-aligned-footer"
+                      style="border-collapse: collapse;display: table;width: 100%;">
+                      <!--[if mso]><table style="width: 600px;" align="center" cellpadding="0" cellspacing="0" role="presentation"><![endif]-->
+                      <!--[if mso]><tr class="layout-email-footer"><![endif]-->
+                      <div class="column"
+                        style="text-align: center;font-size: 12px;line-height: 19px;color: #717a8a;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;display: none;"
+                        align="center">
+                        <div class="footer-logo emb-logo-margin-box"
+                          style="font-size: 26px;line-height: 32px;Margin-top: 10px;Margin-bottom: 20px;color: #7b663d;font-family: Roboto,Tahoma,sans-serif;"
+                          align="center">
+                          <div emb-flexible-footer-logo align="center"></div>
+                        </div>
+                      </div>
+                      <!--[if mso]></tr><![endif]-->
+                      <!--[if mso]><tr class="layout-email-footer"><![endif]-->
+                      <div class="column"
+                        style="text-align: center;font-size: 12px;line-height: 19px;color: #717a8a;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;display: inline;"
+                        align="center">
+                        <div style="margin-left: 0;margin-right: 0;Margin-top: 10px;Margin-bottom: 10px;">
+                          <div class="footer__share-button">
+      
+      
+      
+      
+                            <table style="border-collapse: collapse;table-layout: fixed;display: inline;" cellpadding="0"
+                              cellspacing="0">
+                              <tbody>
+                                <tr>
+                                  <td class="flexible-footer__share-button__container"
+                                    style="margin-bottom: 10px;mso-line-height-rule: exactly;display: inline-block;margin-left: 5px;margin-right: 5px;">
+                                    <fblike class="icon-white"
+                                      style="border-radius: 2px;color: white;display: inline-block;font-size: 11px;font-weight: bold;line-height: 19px;text-align: left;text-decoration: none;border-style: solid;border-width: 4px 0 4px 4px;mso-border-width-alt: 4px 8px 8px 8px;background-color: #525252;border-color: #525252;mso-border-color-alt: #525252;width: 81px;box-sizing: content-box;">
+                                      &nbsp;<img
+                                        style="border: 0;display: inline-block;margin-right: 2px;vertical-align: -3px;"
+                                        src="https://i1.createsend1.com//static/eb/master/13-the-blueprint-3/images/fblike-white-flex@2x.png"
+                                        width="16" height="16" border="0" alt="" />
+                                      <span style="font-size: 11px;mso-text-raise: 3px;">Share&nbsp;</span>
+                                    </fblike>
+                                  </td>
+                                  <td class="flexible-footer__share-button__container"
+                                    style="margin-bottom: 10px;mso-line-height-rule: exactly;display: inline-block;margin-left: 5px;margin-right: 5px;">
+                                    <tweet class="icon-white"
+                                      style="border-radius: 2px;color: white;display: inline-block;font-size: 11px;font-weight: bold;line-height: 19px;text-align: left;text-decoration: none;border-style: solid;border-width: 4px 0 4px 4px;mso-border-width-alt: 4px 8px 8px 8px;background-color: #525252;border-color: #525252;mso-border-color-alt: #525252;width: 81px;box-sizing: content-box;">
+                                      &nbsp;<img
+                                        style="border: 0;display: inline-block;margin-right: 2px;vertical-align: -3px;"
+                                        src="https://i2.createsend1.com//static/eb/master/13-the-blueprint-3/images/tweet-white-flex@2x.png"
+                                        width="16" height="16" border="0" alt="" />
+                                      <span style="font-size: 11px;mso-text-raise: 3px;">Tweet&nbsp;</span>
+                                    </tweet>
+                                  </td>
+                                  <td class="flexible-footer__share-button__container"
+                                    style="margin-bottom: 10px;mso-line-height-rule: exactly;display: inline-block;margin-left: 5px;margin-right: 5px;">
+                                    <linkedinshare class="icon-white"
+                                      style="border-radius: 2px;color: white;display: inline-block;font-size: 11px;font-weight: bold;line-height: 19px;text-align: left;text-decoration: none;border-style: solid;border-width: 4px 0 4px 4px;mso-border-width-alt: 4px 8px 8px 8px;background-color: #525252;border-color: #525252;mso-border-color-alt: #525252;width: 81px;box-sizing: content-box;">
+                                      &nbsp;<img
+                                        style="border: 0;display: inline-block;margin-right: 2px;vertical-align: -3px;"
+                                        src="https://i3.createsend1.com//static/eb/master/13-the-blueprint-3/images/linkedinshare-white-flex@2x.png"
+                                        width="16" height="16" border="0" alt="" />
+                                      <span style="font-size: 11px;mso-text-raise: 3px;">Share&nbsp;</span>
+                                    </linkedinshare>
+                                  </td>
+                                  <td class="flexible-footer__share-button__container"
+                                    style="margin-bottom: 10px;mso-line-height-rule: exactly;display: inline-block;margin-left: 5px;margin-right: 5px;">
+                                    <forwardtoafriend class="icon-white"
+                                      style="border-radius: 2px;color: white;display: inline-block;font-size: 11px;font-weight: bold;line-height: 19px;text-align: left;text-decoration: none;border-style: solid;border-width: 4px 0 4px 4px;mso-border-width-alt: 4px 8px 8px 8px;background-color: #525252;border-color: #525252;mso-border-color-alt: #525252;width: 81px;box-sizing: content-box;"
+                                      lang="en">
+                                      &nbsp;<img
+                                        style="border: 0;display: inline-block;margin-right: 2px;vertical-align: -3px;"
+                                        src="https://i4.createsend1.com//static/eb/master/13-the-blueprint-3/images/forwardtoafriend-white-flex@2x.png"
+                                        width="16" height="16" border="0" alt="" />
+                                      <span style="font-size: 11px;mso-text-raise: 3px;">Forward&nbsp;</span>
+                                    </forwardtoafriend>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <!--[if mso]></tr><![endif]-->
+                      <!--[if mso]><tr class="layout-email-footer"><![endif]-->
+                      <table style="border-collapse: collapse;table-layout: fixed;width: 100%;" cellpadding="0"
+                        cellspacing="0">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <div class="column js-footer-additional-info"
+                                style="text-align: center;font-size: 12px;line-height: 19px;color: #717a8a;font-family: Montserrat,DejaVu Sans,Verdana,sans-serif;display: inline;width: 100%;"
+                                align="center">
+                                <div style="margin-left: 0;margin-right: 0;Margin-top: 10px;Margin-bottom: 10px;">
+      
+      
+      
+                                  <div class="email-footer__additional-info"
+                                    style="font-size: 12px;line-height: 19px;margin-bottom: 15px;">
+                                    <span>
+                                      <preferences style="text-decoration: underline;" lang="en">Preferences</preferences>
+                                      &nbsp;&nbsp;|&nbsp;&nbsp;
+                                    </span>
+                                    <unsubscribe style="text-decoration: underline;" lang="en">Unsubscribe</unsubscribe>
+                                  </div>
+                                  <!--[if mso]>&nbsp;<![endif]-->
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <!--[if mso]></tr></table><![endif]-->
+                    </div>
+                  </div>
+                  <div style="line-height:40px;font-size:40px;" id="footer-bottom-spacing">&nbsp;</div>
+                </div>
+      
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <style type="text/css">
+          @media (max-width:619px) {
+      
+            .email-flexible-footer .left-aligned-footer .column,
+            .email-flexible-footer .center-aligned-footer,
+            .email-flexible-footer .right-aligned-footer .column {
+              max-width: 100% !important;
+              text-align: center !important;
+              width: 100% !important
+            }
+      
+            .flexible-footer-logo {
+              margin-left: 0px !important;
+              margin-right: 0px !important
+            }
+      
+            .email-flexible-footer .left-aligned-footer .flexible-footer__share-button__container,
+            .email-flexible-footer .center-aligned-footer .flexible-footer__share-button__container,
+            .email-flexible-footer .right-aligned-footer .flexible-footer__share-button__container {
+              display: inline-block;
+              margin-left: 5px !important;
+              margin-right: 5px !important
+            }
+      
+            .email-flexible-footer__additionalinfo--center {
+              text-align: center !important
+            }
+      
+            .email-flexible-footer .left-aligned-footer table,
+            .email-flexible-footer .center-aligned-footer table,
+            .email-flexible-footer .right-aligned-footer table {
+              display: table !important;
+              width: 100% !important
+            }
+      
+            .email-flexible-footer .footer__share-button,
+            .email-flexible-footer .email-footer__additional-info {
+              margin-left: 20px;
+              margin-right: 20px
+            }
+          }
+        </style>
+      </body>
+      
+      </html>`,
     };
 
     // Send the email
     transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error('Error sending email: ', error);
-        } else {
-            console.log('Email sent: ', info.response);
-        }
+      if (error) {
+        console.error('Error sending email: ', error);
+      } else {
+        console.log('Email sent: ', info.response);
+      }
     });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 exports.adminLogin = async (req, res) => {
-    userAdmin.find({ email: req.body.email }).exec().then((result) => {
-        if (result.length < 1) {
-            return res.json({ success: false, message: 'User Not Found!' });
+  userAdmin.find({ email: req.body.email }).exec().then((result) => {
+    if (result.length < 1) {
+      return res.json({ success: false, message: 'User Not Found!' });
+    } else {
+      const user = result[0]
+      bcrypt.compare(req.body.password, user.password, (err, ret) => {
+        if (ret) {
+          const payload = {
+            userId: user._id,
+          }
+          const token = jwt.sign(payload, "LEGALDIARYAUTH")
+          res.cookie("token", token, { httpOnly: true, maxAge: 86400000 });
+          return res.json({ success: true, token: token, message: 'Login Successfully !' })
         } else {
-            const user = result[0]
-            bcrypt.compare(req.body.password, user.password, (err, ret) => {
-                if (ret) {
-                    const payload = {
-                        userId: user._id,
-                    }
-                    const token = jwt.sign(payload, "LEGALDIARYAUTH")
-                    res.cookie("token", token, { httpOnly: true, maxAge: 86400000 });
-                    return res.json({ success: true, token: token, message: 'Login Successfully !' })
-                } else {
-                    return res.json({ success: false, message: 'Password does not match!' })
-                }
-            })
+          return res.json({ success: false, message: 'Password does not match!' })
         }
-    }).catch(err => {
-        res.json({ success: false, message: 'Authentication Failed!' })
-    })
+      })
+    }
+  }).catch(err => {
+    res.json({ success: false, message: 'Authentication Failed!' })
+  })
 }
 
 exports.logout = async (req, res) => {
-    try {
-        res.clearCookie("token");
-        res.redirect("/admin/login");
-    } catch (error) {
-        res.json({ success: false, message: 'Authentication Failed!' });
-    }
+  try {
+    res.clearCookie("token");
+    res.redirect("/admin/login");
+  } catch (error) {
+    res.json({ success: false, message: 'Authentication Failed!' });
+  }
 }
 
 exports.login = async (req, res) => {
-    try {
-        return res.render('login');
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
-    }
+  try {
+    return res.render('login');
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
 
 
@@ -264,194 +1471,196 @@ exports.login = async (req, res) => {
 // --------------------------------Cases ---------------------------
 // Render Add Case Page
 exports.addCases = async (req, res) => {
-    try {
-        var adminDatail = await userAdmin.findById(req.userData.userId);
-        return res.render('addcases', { adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
-    }
+  try {
+    var adminDatail = await userAdmin.findById(req.userData.userId);
+    return res.render('addcases', { adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
 
 // Render cases Page
 exports.getAllCases = async (req, res) => {
-    try {
-        var adminDatail = await userAdmin.findById(req.userData.userId);
-        caseModal.find({}).then((cases, error) => {
-            const careerLength = cases.length;
-            var datetime = new Date();
+  try {
+    var adminDatail = await userAdmin.findById(req.userData.userId);
+    caseModal.find({}).then((cases, error) => {
+      const careerLength = cases.length;
+      var datetime = new Date();
 
-            if (cases) {
-                return res.render('cases', { message: 'cases fetch successfully', careerLength: careerLength, casesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path, currentDate: datetime.toISOString().slice(0, 10) });
-            } else {
-                res.status(400).send({ success: false, message: 'Internal Error!' })
-            }
-        })
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
-    }
+      if (cases) {
+        return res.render('cases', { message: 'cases fetch successfully', careerLength: careerLength, casesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path, currentDate: datetime.toISOString().slice(0, 10) });
+      } else {
+        res.status(400).send({ success: false, message: 'Internal Error!' })
+      }
+    })
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
 
 exports.addcases = async (req, res) => {
-    try {
-        if (!req.body.previous_date || !req.body.next_date || !req.body.case_no || !req.body.court_name || !req.body.party_name) {
-            res.json({ success: false, message: "All fields are required" });
-        } else if (req.body.previous_date && req.body.next_date && req.body.case_no && req.body.court_name && req.body.party_name) {
-            const cases = new caseModal({
-                previous_date: new Date(req.body.previous_date),
-                next_date: new Date(req.body.next_date),
-                case_no: req.body.case_no,
-                court_name: req.body.court_name,
-                party_name: req.body.party_name,
-                case_type: req.body.case_type,
-                case_stage: req.body.case_stage,
-                user_name: req.body.user_name,
-                email: req.body.email,
-                advance_payment: req.body.advance_payment,
-                pending_payment: req.body.pending_payment,
-                total_payment: req.body.total_payment
-            })
-            await cases.save();
-            res.json({ success: true, message: "Case added successfully" });
-        }
-    } catch (error) {
-        res.json({ success: false, message: "Internal Error!", error: error });
+  try {
+    if (!req.body.previous_date || !req.body.next_date || !req.body.case_no || !req.body.court_name || !req.body.party_name) {
+      res.json({ success: false, message: "All fields are required" });
+    } else if (req.body.previous_date && req.body.next_date && req.body.case_no && req.body.court_name && req.body.party_name) {
+      const cases = new caseModal({
+        previous_date: new Date(req.body.previous_date),
+        next_date: new Date(req.body.next_date),
+        case_no: req.body.case_no,
+        court_name: req.body.court_name,
+        party_name: req.body.party_name,
+        case_type: req.body.case_type,
+        case_stage: req.body.case_stage,
+        user_name: req.body.user_name,
+        email: req.body.email,
+        advance_payment: req.body.advance_payment,
+        pending_payment: req.body.pending_payment,
+        total_payment: req.body.total_payment,
+        case_status: req.body.case_status
+      })
+      console.log(cases)
+      await cases.save();
+      res.json({ success: true, message: "Case added successfully" });
     }
+  } catch (error) {
+    res.json({ success: false, message: "Internal Error!", error: error });
+  }
 }
 
 exports.editCaseDetails = async (req, res) => {
-    try {
-        const { caseId } = req.params;
-        const { previous_date, next_date, case_no, court_name, party_name, case_type, case_stage } = req.body;
+  try {
+    const { caseId } = req.params;
+    const { previous_date, next_date, case_no, court_name, party_name, case_type, case_stage } = req.body;
 
 
-        if (!previous_date || !next_date || !case_no || !court_name || !party_name || !case_type || !case_stage) {
-            return res.json({ success: false, message: "All fields are required" });
-        }
-
-        const updateFields = {
-            previous_date,
-            next_date,
-            case_no,
-            court_name,
-            party_name,
-            case_type,
-            case_stage,
-        }
-
-        const editedData = await caseModal.findByIdAndUpdate(caseId, updateFields, { new: true });
-
-        if (!editedData) {
-            return res.status(404).send('Case not found');
-        } else {
-            // res.redirect(`/admin/propertyView`);
-            res.status(200).send({ success: true, message: 'Case Details Edit Successfully!' });
-        }
-
-
-
-    } catch (error) {
-        return res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+    if (!previous_date || !next_date || !case_no || !court_name || !party_name || !case_type || !case_stage) {
+      return res.json({ success: false, message: "All fields are required" });
     }
+
+    const updateFields = {
+      previous_date,
+      next_date,
+      case_no,
+      court_name,
+      party_name,
+      case_type,
+      case_stage,
+    }
+
+    const editedData = await caseModal.findByIdAndUpdate(caseId, updateFields, { new: true });
+
+    if (!editedData) {
+      return res.status(404).send('Case not found');
+    } else {
+      // res.redirect(`/admin/propertyView`);
+      res.status(200).send({ success: true, message: 'Case Details Edit Successfully!' });
+    }
+
+
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
 
 exports.deleteCaseDetails = async (req, res) => {
-    try {
-        const { caseId } = req.params;
+  try {
+    const { caseId } = req.params;
 
-        // Find and delete the product by ID
-        const deletedData = await caseModal.findByIdAndDelete(caseId);
+    // Find and delete the product by ID
+    const deletedData = await caseModal.findByIdAndDelete(caseId);
 
-        if (!deletedData) {
-            return res.status(404).json({ success: false, message: 'Data not found' });
-        } else {
-            res.status(200).send({ success: true, message: 'Case Data Deleted Successfully!' });
-        }
-
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+    if (!deletedData) {
+      return res.status(404).json({ success: false, message: 'Data not found' });
+    } else {
+      res.status(200).send({ success: true, message: 'Case Data Deleted Successfully!' });
     }
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
 
 
 // --------------------------------Fees ---------------------------
 exports.fees = async (req, res) => {
-    try {
-        var adminDatail = await userAdmin.findById(req.userData.userId);
-        caseModal.find({}).then((cases, error) => {
-            if (cases) {
-                return res.render('fees', { feesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
-            } else {
-                res.status(400).send({ success: false, message: 'Internal Error!' })
-            }
-        })
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
-    }
+  try {
+    var adminDatail = await userAdmin.findById(req.userData.userId);
+    caseModal.find({}).then((cases, error) => {
+      if (cases) {
+        return res.render('fees', { feesData: cases, adminName: adminDatail.userName, adminPhoto: adminDatail.profilePhoto.path });
+      } else {
+        res.status(400).send({ success: false, message: 'Internal Error!' })
+      }
+    })
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
 
 exports.downloadFees = async (req, res) => {
-    try {
+  try {
 
-        const caseId = req.params.id;
+    const caseId = req.params.id;
 
-        var adminDatail = await userAdmin.findById(req.userData.userId);
-        const selectedCase = await caseModal.findById({ _id: caseId });
+    var adminDatail = await userAdmin.findById(req.userData.userId);
+    const selectedCase = await caseModal.findById({ _id: caseId });
 
-        if (selectedCase) {
-            res.render('invoice', {
-                feesData: {
-                    previous_date: selectedCase.previous_date,
-                    next_date: selectedCase.next_date,
-                    case_no: selectedCase.case_no,
-                    court_name: selectedCase.court_name,
-                    party_name: selectedCase.party_name,
-                    case_type: selectedCase.case_type,
-                    case_stage: selectedCase.case_stage,
-                    user_name: selectedCase.user_name,
-                    email: selectedCase.email,
-                    advance_payment: selectedCase.advance_payment,
-                    pending_payment: selectedCase.pending_payment,
-                    total_payment: selectedCase.total_payment
-                },
-                adminName: adminDatail.userName,
-                adminPhoto: adminDatail.profilePhoto.path
-            });
-        } else {
-            res.status(404).send({ success: false, message: 'Case not found!' });
-        }
-
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+    if (selectedCase) {
+      res.render('invoice', {
+        feesData: {
+          previous_date: selectedCase.previous_date,
+          next_date: selectedCase.next_date,
+          case_no: selectedCase.case_no,
+          court_name: selectedCase.court_name,
+          party_name: selectedCase.party_name,
+          case_type: selectedCase.case_type,
+          case_stage: selectedCase.case_stage,
+          user_name: selectedCase.user_name,
+          email: selectedCase.email,
+          advance_payment: selectedCase.advance_payment,
+          pending_payment: selectedCase.pending_payment,
+          total_payment: selectedCase.total_payment
+        },
+        adminName: adminDatail.userName,
+        adminPhoto: adminDatail.profilePhoto.path
+      });
+    } else {
+      res.status(404).send({ success: false, message: 'Case not found!' });
     }
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
 
 exports.editFeesDetails = async (req, res) => {
-    try {
-        const { caseId } = req.params;
-        const { advance_payment, pending_payment, total_payment } = req.body;
+  try {
+    const { caseId } = req.params;
+    const { advance_payment, pending_payment, total_payment } = req.body;
 
-        if (!advance_payment || !pending_payment || !total_payment) {
-            return res.json({ success: false, message: "All fields are required" });
-        }
-
-        const updateFields = {
-            advance_payment,
-            pending_payment,
-            total_payment,
-        }
-
-        const editedData = await caseModal.findByIdAndUpdate(caseId, updateFields, { new: true });
-
-        if (!editedData) {
-            return res.status(404).send('Case not found');
-        } else {
-            // res.redirect(`/admin/propertyView`);
-            res.status(200).send({ success: true, message: 'Fees Details Edit Successfully!' });
-        }
-
-
-
-    } catch (error) {
-        return res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+    if (!advance_payment || !pending_payment || !total_payment) {
+      return res.json({ success: false, message: "All fields are required" });
     }
+
+    const updateFields = {
+      advance_payment,
+      pending_payment,
+      total_payment,
+    }
+
+    const editedData = await caseModal.findByIdAndUpdate(caseId, updateFields, { new: true });
+
+    if (!editedData) {
+      return res.status(404).send('Case not found');
+    } else {
+      // res.redirect(`/admin/propertyView`);
+      res.status(200).send({ success: true, message: 'Fees Details Edit Successfully!' });
+    }
+
+
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error occurred', error: error.message });
+  }
 }
